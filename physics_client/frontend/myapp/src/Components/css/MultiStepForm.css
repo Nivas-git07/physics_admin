@@ -1,0 +1,433 @@
+/* MultiStepForm.css */
+
+:root {
+  --primary-color: #1AC5A8;   /* teal accent */
+  --text-color: #333;
+  --bg-color: #f8fcfa;
+  --card-bg: #ffffff;
+  --shadow-color: rgba(0, 0, 0, 0.06);
+  --border-radius: 12px;
+  --input-border: #e2e8ec;
+  --input-focus-border: var(--primary-color);
+  --button-radius: 8px;
+  --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background: var(--bg-color);
+  font-family: var(--font-family);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+}
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background-color: #f1fffd !important;
+  padding-top: 0.1rem;
+  /* Make top padding minimal */
+  padding-bottom: 0.1rem;
+
+  padding-left: 2rem;
+  padding-right: 2rem;
+  margin-top: 0;
+  margin-top: 0;
+  padding: 4px 32px;
+  /* smaller vertical padding */
+  min-height: 48px;
+
+}
+
+.logo {
+  flex: 0 0 auto;
+  font-size: 25px;
+  font-family: 'Mochiy Pop P One', sans-serif !important;
+  font-weight: bold;
+  font-size: 25px;
+  color: #00bfa6;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4.5rem;
+  list-style: none;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0;
+}
+
+
+.nav-link {
+  color: #6e7a87 !important;
+  /* Gray initial color */
+  text-decoration: none !important;
+  /* No underline */
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: color 0.2s;
+  background: none;
+  padding: 0;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: #00bfa6 !important;
+  /* Teal on hover/active */
+}
+
+/* Remove browser default link colors for nav section */
+.navbar a:visited,
+.navbar a:focus,
+.navbar a:active {
+  color: #6e7a87 !important;
+  text-decoration: none !important;
+}
+
+
+
+.logo {
+  font-family: 'Alsina', sans-serif;
+  font-weight: bold;
+  font-size: 25px;
+  color: #00bfa6;
+
+}
+
+.email {
+  font-family: 'Poppins', sans-serif;
+  color: #444;
+  font-size: 1.05rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  flex: 0 0 auto;
+}
+
+.multi-step-form {
+  max-width: 540px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.form-step {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: 0 8px 20px var(--shadow-color);
+  padding: 30px 25px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.form-step h2 {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 24px;
+  color: var(--primary-color);
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+select,
+textarea {
+  width: 90%;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  border: 1px solid var(--input-border);
+  border-radius: var(--button-radius);
+  font-size: 15px;
+  font-family: var(--font-family);
+  background: #fff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--input-focus-border);
+  box-shadow: 0 0 0 3px rgba(26, 197, 168, 0.18);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.gender-group {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 18px;
+}
+
+.gender-group label {
+  display: flex;
+  align-items: center;
+  font-weight: 400;
+}
+
+.gender-group input[type="radio"] {
+  margin-right: 8px;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+button {
+  padding: 11px 22px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #fff;
+  background: var(--primary-color);
+  border: none;
+  border-radius: var(--button-radius);
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background: darken(var(--primary-color), 8%);
+  transform: translateY(-1px);
+}
+
+.btn-prev {
+  background: #e0e0e0;
+  color: #555;
+}
+
+.btn-prev:hover {
+  background: #d5d5d5;
+}
+
+.btn-submit {
+  /* same as default button or you can accent differently */
+}
+.site-footer {
+  width: 100%;
+  background: #f0f6f3;  /* a light soft background */
+  margin-top: 50px;
+  padding: 60px 20px 20px;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #283046;
+}
+
+.footer-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  justify-space: between;
+}
+
+.footer-left, .footer-right {
+  flex: 1 1 300px;
+}
+
+.footer-left h2 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.footer-left h2 .accent {
+  color: #1AC5A8;  /* teal accent */
+}
+
+.footer-left p {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #6B7A8F;
+}
+
+.footer-right h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.footer-info-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-info-list li {
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+
+.footer-info-list a {
+  color: #1AC5A8;
+  text-decoration: none;
+}
+
+.footer-info-list a:hover {
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  border-top: 1px solid #e2e8ec;
+  margin-top: 40px;
+  padding-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-space: between;
+  align-items: center;
+  font-size: 14px;
+  color: #6B7A8F;
+}
+
+.footer-bottom .designer-credit {
+  margin-top: 8px;
+}
+/* Add to your MultiStepForm.css or separate CSS file */
+.comment-section-container {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.comment-section-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #283046;  /* dark slate for heading */
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.comment-section-title::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: #1AC5A8;  /* same teal accent as above */
+  margin: 8px auto 0;
+  border-radius: 2px;
+}
+
+.comment-box {
+  max-width: 700px;
+  margin: 0 auto;
+  background: #fff;
+  border: 1px solid #e2e8ec;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  padding: 30px 25px;
+  position: relative;
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.comment-author {
+  text-align: left;
+}
+
+.author-name {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  color: #283046;
+}
+
+.author-role {
+  display: block;
+  font-size: 14px;
+  color: #6B7A8F;
+}
+
+.quote-icon {
+  font-size: 40px;
+  color: #1AC5A8;
+  line-height: 1;
+}
+
+.comment-textarea {
+  width: 90%;
+  padding: 18px 20px;
+  font-size: 15px;
+  border: 1px solid #e2e8ec;
+  border-radius: 8px;
+  resize: vertical;
+  min-height: 120px;
+  margin-bottom: 20px;
+}
+
+.comment-textarea:focus {
+  border-color: #1AC5A8;
+  box-shadow: 0 0 0 3px rgba(26,197,168,0.18);
+  outline: none;
+}
+
+.comment-submit-btn {
+  background: #1AC5A8;
+  color: #fff;
+  padding: 12px 30px;
+  font-size: 15px;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.comment-submit-btn:hover {
+  background: #17b79a;  /* slightly darker teal */
+  transform: translateY(-1px);
+}
+
+@media (max-width: 600px) {
+  .comment-box {
+    padding: 20px 15px;
+  }
+  .comment-textarea {
+    min-height: 100px;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .footer-bottom .designer-credit {
+    margin-top: 8px;
+  }
+}
+
+
+
+@media (max-width: 600px) {
+  .multi-step-form {
+    margin: 20px;
+    padding: 10px;
+  }
+  .form-step {
+    padding: 20px 15px;
+  }
+}

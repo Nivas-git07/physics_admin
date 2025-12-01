@@ -1,0 +1,435 @@
+/* src/css/ScheduleForm.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: #f8fbfc;
+}
+
+/* Container */
+.main-container {
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+/* Step Progress */
+.top-progress {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+  gap: 20px;
+}
+
+.progress-item {
+  display: flex;
+  align-items: center;
+}
+
+.circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #ddd;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.circle.active {
+  background: #00bfa5;
+}
+
+.line {
+  width: 120px;
+  height: 3px;
+  background: #ddd;
+}
+
+.line.active {
+  background: #00bfa5;
+}
+
+/* Cards Container */
+.cards-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Card Styles */
+.card {
+  width: 380px;
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  overflow: hidden;
+  opacity: 0.5;
+  transition: all 0.4s;
+}
+
+.card.active {
+  opacity: 1;
+  transform: translateY(-10px);
+  box-shadow: 0 20px 50px rgba(0,191,165,0.2);
+}
+
+.card h1 {
+  background: #f8fbfb;
+  padding: 25px 30px;
+  font-size: 28px;
+  color: #00bfa5;
+  font-weight: 600;
+}
+
+/* Card Body */
+.card-body {
+  padding: 30px;
+}
+
+.card input {
+  width: 100%;
+  padding: 16px 18px;
+  margin: 12px 0;
+  border: 2px solid #eee;
+  border-radius: 16px;
+  font-size: 16px;
+}
+
+.date-input {
+  padding: 16px 18px !important;
+}
+
+/* Time Input Styles */
+.time-row {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.time-row > div {
+  flex: 1;
+}
+
+.time-row label {
+  display: block;
+  margin-bottom: 5px;
+  color: #555;
+  font-size: 14px;
+}
+
+.time-row input[type="time"] {
+  width: 100%;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+/* Search box */
+.search-box {
+  margin-bottom: 15px !important;
+  padding: 12px 15px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+}
+
+/* Select / Deselect Buttons */
+.select-all-row {
+  display: flex;
+  gap: 10px;
+  margin: 10px 0 15px;
+}
+
+.select-btn {
+  flex: 1;
+  background-color: #6c63ff;
+  color: white;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.select-btn:hover {
+  background-color: #574fd6;
+}
+
+/* People Scroll */
+.people-scroll {
+  max-height: 380px;
+  overflow-y: auto;
+  border: 1px solid #f0f0f0;
+  border-radius: 16px;
+  padding: 10px;
+}
+
+/* Person Row */
+.person-row {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border-radius: 12px;
+  margin: 6px 0;
+  cursor: pointer;
+  gap: 12px;
+  background: #fafafa;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.person-row:hover {
+  background: #f0f8ff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.person-row.selected {
+  background: #e0f7fa;
+  border: 2px solid #00bfa5;
+}
+
+/* Profile Icon */
+.profile-icon {
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg,#6c63ff,#8a7bff);
+  color: #fff;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Person Info */
+.person-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.person-info .name {
+  font-weight: 600;
+  font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.person-info .email {
+  font-size: 13px;
+  color: #555;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Selected Checkmark */
+.selected-check {
+  margin-left: auto;
+  color: #4caf50;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Summary Box */
+.summary {
+  background: #f0f8ff;
+  padding: 25px;
+  border-radius: 20px;
+  margin-bottom: 25px;
+}
+
+.summary h3 {
+  color: #00bfa5;
+  margin-bottom: 15px;
+}
+
+.time-display {
+  background: linear-gradient(90deg,#6c63ff,#8a7bff);
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-weight: 600;
+  color: white;
+  font-size: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  margin: 5px 0;
+}
+
+/* Buttons */
+.btn-row {
+  display: flex;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.next-btn,
+.create-btn {
+  flex: 1;
+  padding: 16px;
+  border: none;
+  border-radius: 50px;
+  font-size: 17px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.next-btn {
+  background: #00bfa5;
+}
+
+.create-btn {
+  background: #00bfa5;
+}
+
+.next-btn:hover,
+.create-btn:hover {
+  background: #009e8f;
+}
+
+.back-btn {
+  background: #888;
+  color: white;
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 100px;
+  font-size: 20px;
+  color: #00bfa5;
+}
+/* Time display in Step 3 - normal text */
+.time-display {
+  background: none; /* remove gradient */
+  color: #333;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 0;
+  box-shadow: none;
+  margin: 5px 0;
+  display: inline-block;
+}
+
+/* Step 2 Next and Step 3 Create button */
+.next-btn.large-btn,
+.create-btn.large-btn {
+  padding: 14px 30px; /* slightly bigger, clean size */
+  font-size: 16px;
+  border-radius: 12px; /* rounded but not too big */
+  text-align: center;
+  flex: 1;
+  max-width: 200px; /* limit button width */
+  margin: 0 auto; /* center horizontally */
+  display: block;
+}
+
+/* Button hover */
+.next-btn.large-btn:hover,
+.create-btn.large-btn:hover {
+  background-color: #009e8f;
+}
+
+/* Center btn-row for these buttons */
+.btn-row {
+  display: flex;
+  justify-content: center; /* center buttons */
+  gap: 15px;
+  margin-top: 25px;
+}
+/* Step 2 and 3 buttons improved */
+.next-btn.large-btn,
+.create-btn.large-btn,
+.back-btn {
+  padding: 14px 28px;
+  font-size: 16px;
+  border-radius: 12px;
+  flex: 1;
+  max-width: 180px;
+  margin: 0 auto;
+  display: block;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.next-btn.large-btn {
+  background-color: #00bfa5;
+  color: white;
+}
+
+.create-btn.large-btn {
+  background-color: #00bfa5;
+  color: white;
+}
+
+.back-btn {
+  background-color: #888;
+  color: white;
+}
+
+.next-btn.large-btn:hover,
+.create-btn.large-btn:hover,
+.back-btn:hover {
+  opacity: 0.9;
+}
+
+/* Overlay for creating meeting */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.overlay-content {
+  background: white;
+  padding: 30px 40px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #ddd;
+  border-top: 4px solid #00bfa5;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.overlay-content p {
+  font-size: 16px;
+  font-weight: 600;
+  color: #00bfa5;
+}

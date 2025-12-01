@@ -1,0 +1,295 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #ffffff, #ecfbf7);
+}
+
+/* ✅ Page Layout */
+.page-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.login-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.login-card {
+  display: flex;
+  flex-direction: row;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 900px;
+  max-width: 95%;
+  min-height: 400px;
+}
+
+/* ✅ Left Section */
+.login-left {
+  flex: 1;
+  padding: 60px 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-left h1 {
+  font-size: 2.2rem;
+  color: #111827;
+  margin-bottom: 10px;
+}
+
+.wave {
+  font-size: 1.8rem;
+}
+
+.subtext {
+  color: #6b7280;
+  margin-bottom: 35px;
+  font-size: 15px;
+}
+
+.link {
+  color: #00bfa6;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* ✅ Form Styling */
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* ✅ Unified Input Design */
+.form-input {
+  width: 100%;
+  height: 52px;
+  padding: 0 20px;
+  border: 1.5px solid #d1d5db;
+  border-radius: 50px;
+  background-color: #fff;
+  font-size: 15px;
+  color: #111;
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.25s ease;
+}
+
+.form-input:focus {
+  border-color: #00bfa6;
+  box-shadow: 0 0 0 3px rgba(0, 191, 166, 0.2);
+}
+
+.form-input::placeholder {
+  color: #9ca3af;
+  font-size: 14px;
+}
+/* ✅ Signup Input Fields (with importance) */
+.signup-input {
+  width: 100% !important;
+  height: 52px !important;
+  padding: 0 20px !important;
+  border: 1.5px solid #d1d5db !important;
+  border-radius: 50px !important;
+  background-color: #fff !important;
+  font-size: 15px !important;
+  color: #111 !important;
+  outline: none !important;
+  box-sizing: border-box !important;
+  transition: all 0.25s ease !important;
+  margin-top: 10px !important; 
+}
+
+/* ✅ Placeholder text color */
+.signup-input::placeholder {
+  color: #9ca3af !important;
+  font-size: 14px !important;
+}
+
+/* ✅ On focus border and glow */
+.signup-input:focus {
+  border-color: #00bfa6 !important;
+  box-shadow: 0 0 0 3px rgba(0, 191, 166, 0.2) !important;
+}
+
+
+.error {
+  color: red;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+/* ✅ Button */
+.btn {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 50px;
+  background-color: #00bfa6;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  margin-top: 10px;
+  margin-bottom: 25px;
+}
+
+.btn:hover {
+  background: #00a896;
+  opacity: 0.9;
+}
+
+/* ✅ Terms and Forgot Password Row */
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0 20px;
+  font-size: 14px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #111;
+  font-weight: 400;
+}
+
+.checkbox-label input {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+
+.terms-link, .forgot-link {
+  color: #0071e3;
+  text-decoration: none;
+  font-weight: 400;
+}
+
+.terms-link:hover, .forgot-link:hover {
+  text-decoration: underline;
+}
+
+/* ✅ Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 25px 0 20px;
+  color: #6b7280;
+  font-size: 14px;
+  position: relative;
+}
+
+.divider span {
+  flex: 1;
+  height: 1px;
+  background: #dcdcdc;
+  margin: 0 10px;
+}
+
+.divider p {
+  margin: 0;
+  color: #6b7280;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* ✅ Social Buttons Row */
+.social-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+  margin-top: 22px;
+}
+
+.social-row button {
+  width: 63px;
+  height: 50px;
+  border: 1px solid #d1d5db;
+  background: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.25s ease;
+}
+
+.social-row button:hover {
+  background: #f9fafb;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+}
+
+.social-row img {
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
+.social-row img:hover {
+  transform: scale(1.1);
+}
+
+/* ✅ Right Section */
+.login-right {
+  flex: 1;
+  background: #ecfbf7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-right img {
+  width: 80%;
+  max-width: 400px;
+}
+
+/* ✅ Responsive */
+@media (max-width: 850px) {
+  .login-card {
+    flex-direction: column;
+    width: 90%;
+  }
+
+  .login-right {
+    background: none;
+  }
+
+  .login-right img {
+    max-width: 250px;
+    margin-top: 20px;
+  }
+
+  .social-row {
+    gap: 15px;
+  }
+}

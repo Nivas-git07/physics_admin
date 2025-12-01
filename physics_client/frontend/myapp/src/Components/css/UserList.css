@@ -1,0 +1,239 @@
+/* src/css/UserList.css */
+.userlist-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #f5fffe;
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.header h1 {
+  color: #00bfa5;
+  font-size: 2.6rem;
+  margin-bottom: 8px;
+}
+
+.header p {
+  color: #555;
+  font-size: 1.2rem;
+}
+
+.search-bar {
+  margin-bottom: 30px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 16px 20px;
+  font-size: 1.1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 16px;
+  outline: none;
+}
+
+.search-bar input:focus {
+  border-color: #00bfa5;
+  box-shadow: 0 0 0 4px rgba(0,191,165,0.15);
+}
+
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 22px;
+}
+
+.user-card {
+  background: white;
+  border-radius: 28px;
+  padding: 22px 28px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+  border: 1px solid #f0f0f0;
+}
+
+.user-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0,191,165,0.18);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex: 1;
+}
+
+.avatar {
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #00bfa5, #00897b);
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,191,165,0.4);
+  flex-shrink: 0;
+}
+
+.user-details h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  color: #222;
+  font-weight: 600;
+}
+
+.status {
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.status.active {
+  background: #e8f5f3;
+  color: #00695c;
+}
+
+.status.inactive {
+  background: #ffebee;
+  color: #c62828;
+}
+.below{
+    margin-left: 10px;
+}
+
+.below:hover{
+    color: white;
+    background-color: black;
+    
+}
+.delete-btn {
+  background: #ff5252;
+  color: white;
+  border: none;
+  padding: 11px 28px;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(255,82,82,0.3);
+}
+
+.delete-btn:hover {
+  background: #e53935;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 25px rgba(255,82,82,0.4);
+}
+
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 80px;
+  color: #999;
+  font-size: 1.4rem;
+}
+
+/* MODAL - Same as before (beautiful) */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal {
+  background: white;
+  border-radius: 24px;
+  width: 90%;
+  max-width: 480px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+  animation: pop 0.4s ease;
+}
+
+@keyframes pop {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-header {
+  background: #ff5252;
+  color: white;
+  padding: 24px;
+  text-align: center;
+}
+
+.modal-header h2 { margin: 0; font-size: 1.8rem; }
+
+.modal-body {
+  padding: 30px;
+  text-align: center;
+}
+
+.user-preview {
+  background: #f8f9fa;
+  padding: 18px;
+  border-radius: 16px;
+  margin: 20px 0;
+  font-size: 1.1rem;
+}
+
+.warning {
+  color: #d32f2f;
+  margin-top: 15px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 16px;
+  padding: 0 30px 30px;
+}
+
+.cancel-btn, .confirm-delete-btn {
+  flex: 1;
+  padding: 16px;
+  border: none;
+  border-radius: 50px;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.cancel-btn {
+  background: #e0e0e0;
+}
+
+.confirm-delete-btn {
+  background: #ff5252;
+  color: white;
+}
+
+.confirm-delete-btn:hover {
+  background: #e53935;
+}
+
+.loading {
+  text-align: center;
+  padding: 100px;
+  font-size: 1.6rem;
+  color: #00bfa5;
+}

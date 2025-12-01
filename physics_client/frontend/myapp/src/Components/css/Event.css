@@ -1,0 +1,189 @@
+/* ================= Event Page ================= */
+.event-page {
+  min-height: 100vh;
+  background: #f8fbfd;
+}
+
+.event-wrapper {
+  padding: 60px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Header */
+.event-header {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 50px;
+}
+
+/* Event Card */
+.event-card {
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+  max-width: 660px;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Upper Section */
+.event-upper {
+  padding: 40px;
+  background: white;
+  margin: 5px;
+  margin-bottom: 50px;
+  border-radius: 50px;
+}
+
+.title-section {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 36px;
+}
+
+.calendar-icon {
+  width: 56px;
+  height: 56px;
+  background: #e6f7f5;
+  color: #00a899;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.event-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #0b3c49;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Time/Date + Duration Row */
+.datetime-duration {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.datetime-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.time-text {
+  font-size: 28px;
+  font-weight: 600;
+  color: #1a1a1a;
+  line-height: 1.2;
+}
+
+.date-text {
+  font-size: 20px;
+  font-weight: 500;
+  color: #555;
+}
+
+.duration-box {
+  text-align: right;
+}
+
+.duration-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #00a899;
+  line-height: 1;
+}
+
+.duration-label {
+  font-size: 16px;
+  color: #666;
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+/* Lower Section */
+.event-lower {
+  padding: 40px;
+  background: #f8fbfd;
+  text-align: center;
+}
+
+.topics-heading {
+  font-size: 19px;
+  font-weight: 600;
+  color: #222;
+  margin: 0 0 16px 0;
+}
+
+.topics-description {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #444;
+  margin: 0 auto 32px;
+  max-width: 540px;
+}
+
+.join-btn {
+  padding: 14px 40px;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  background: #00a899;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.join-btn:hover {
+  background: #008a7c;
+}
+
+/* ================= No-Class Box ================= */
+.no-class-wrapper {
+  width: 100%;
+  min-height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.no-class-card {
+  background: white;
+  border-radius: 20px;
+  padding: 30px 40px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.06);
+  text-align: center;
+  width: 460px; /* Matches other card width */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.no-class-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.12);
+}
+
+.no-class-icon {
+  color: #00a899;
+  margin-bottom: 16px;
+}
+
+.no-class-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #0b3c49;
+  margin-bottom: 6px;
+}
+
+.no-class-sub {
+  font-size: 15px;
+  color: #555;
+}

@@ -1,0 +1,140 @@
+.research-container {
+  text-align: center;
+  padding: 80px 50px;
+  background-color: #f8fcfd;
+  font-family: "Poppins", sans-serif;
+  color: #1b1b1b;
+}
+
+.research-title {
+  font-size: 30px;
+  font-weight: 700;
+  color: #14213d;
+}
+
+.underline {
+  width: 120px;
+  height: 3px;
+  background-color: #00bfa6;
+  margin: 10px auto 50px auto;
+  border-radius: 3px;
+}
+
+/* Research Cards */
+.research-cards {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+  padding: 40px 30px;
+  width: 320px;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 24px rgba(0, 191, 166, 0.2);
+}
+
+.icon-box {
+  width: 45px;
+  height: 45px;
+  border-radius: 10px;
+  background-color: #e7f9f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.icon {
+  font-size: 20px;
+  color: #00bfa6;
+}
+
+.card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.card p {
+  color: #666;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+.read-more {
+  text-decoration: none;
+  color: #00bfa6;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.read-more:hover .arrow {
+  transform: translateX(3px);
+  transition: 0.3s;
+}
+
+/* Navigation buttons */
+.nav-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 60px;
+}
+
+.circle-btn {
+  background-color: white;
+  border: none;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  color: #00bfa6;
+  font-weight: bold;
+}
+
+.circle-btn:hover {
+  background-color: #00bfa6;
+  color: white;
+}
+
+/* About Section */
+.about-section {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+  padding: 50px;
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.about-section h3 {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.about-section p {
+  font-size: 16px;
+  color: #444;
+  line-height: 1.6;
+}
+
+.about-section b {
+  color: #00bfa6;
+}
