@@ -57,21 +57,18 @@ export default function Navbar() {
 
         <ul className="nav-links">
           <li><Link to="/home" className={`nav-link ${isActive("/home") ? "active" : ""}`}>Home</Link></li>
-          <li><Link to="/form" className={`nav-link ${isActive("/form") ? "active" : ""}`}>Form</Link></li>
-          <li><a href="#footer" className="nav-link">About</a></li>
-          <li><Link to="/event" className={`nav-link ${isActive("/event") ? "active" : ""}`}>Event</Link></li>
+          
           <li><Link to="/schedule" className={`nav-link ${isActive("/schedule") ? "active" : ""}`}>Schedule</Link></li>
           <li><Link to="/users" className={`nav-link ${isActive("/users") ? "active" : ""}`}>User</Link></li>
+          <li><Link to="/detail" className={`nav-link ${isActive("/detail") ? "active" : ""}`}>FormDetail</Link></li>
         </ul>
 
         <div className="email">
           {loading ? (
             <span>Loading...</span>
-          ) : email ? (
+          ) :  (
             <span>{email}</span>
-          ) : (
-            <Link to="/sign" className="nav-link login-btn">Sign In</Link>
-          )}
+          ) }
         </div>
       </nav>
     </header>

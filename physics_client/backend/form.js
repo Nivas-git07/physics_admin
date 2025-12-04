@@ -11,6 +11,12 @@ app.use(express.json());
 const JWT_SECRET = "supersecret";
 const jwt = require("jsonwebtoken");
 
+app.use(
+  cors({
+    origin: "http://localhost:3000", // your frontend URL
+    credentials: true, // allow cookies / auth
+  })
+);
 const pool = new Pool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -213,6 +219,27 @@ app.get("/event",auth, async (req, res) => {
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// GET all forms - latest first
+app.get("/api/forms", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM form ORDER BY created_at DESC");
+    res.json({ success: true, forms: result.rows });
+  } catch (err) {
+    res.status(500).json({ success: false });
+  }
+});
+
+// DELETE form
+app.delete("/api/forms/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await pool.query("DELETE FROM form WHERE id = $1", [id]);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false });
   }
 });
 

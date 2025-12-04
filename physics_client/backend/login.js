@@ -650,9 +650,9 @@ function auth(req, res, next) {
 app.get("/api/admin/users", async (req, res) => {
   try {
     const result = await pool.query(`
-      SELECT id, email, status 
-      FROM login 
-      ORDER BY id ASC
+      SELECT login.email, form.name
+      FROM login
+      LEFT JOIN form ON login.email = form.email
     `);
     res.json({ 
       success: true, 
@@ -737,6 +737,26 @@ app.get("/schedule", async (req, res) => {
     res.status(500).json({ message: "internal server error" });
   }
 });
+app.get("/api/forms", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM form ORDER BY created_at DESC");
+    res.json({ success: true, forms: result.rows });
+  } catch (err) {
+    res.status(500).json({ success: false });
+  }
+});
+
+// DELETE form
+app.delete("/api/forms/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    await pool.query("DELETE FROM form WHERE id = $1", [id]);
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false });
+  }
+});
+
 cron.schedule("*/2 * * * *", async () => {
   try {
     const result = await pool.query(`DELETE FROM gmeet WHERE end_time < NOW()`);
@@ -745,6 +765,7 @@ cron.schedule("*/2 * * * *", async () => {
     console.error("Error deleting expired events:", err);
   }
 });
+
 
 
 app.listen(PORT, () => {

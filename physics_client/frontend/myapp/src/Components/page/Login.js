@@ -59,12 +59,9 @@ export default function LoginForm({ onSubmit }) {
         <div className="login-card">
           <div className="login-left">
             <h1>
-              Welcome Back <span className="wave">👋</span>
+              Hello Fathima MS <span className="wave">👋</span>
             </h1>
-            <p className="subtext">
-              Don't have an account?{" "}
-              <Link to="/sign" className="link">Sign up</Link>
-            </p>
+            
 
             <form onSubmit={handleSubmit}>
               <div className="form-group">

@@ -28,9 +28,10 @@ export default function UserList() {
   const handleDelete = async () => {
     if (!deleteModal) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/admin/delete-user/${deleteModal.id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `http://localhost:5000/api/admin/delete-user/${deleteModal.id}`,
+        { method: "DELETE" }
+      );
       const result = await res.json();
       if (result.success) {
         setUsers(prev => prev.filter(u => u.id !== deleteModal.id));
@@ -50,8 +51,8 @@ export default function UserList() {
   return (
     <>
       <Navbar />
-      <div className="userlist-container">
 
+      <div className="userlist-container">
         <div className="header">
           <h1>Manage Users</h1>
           <p>Total: <strong>{users.length}</strong> users</p>
@@ -66,56 +67,85 @@ export default function UserList() {
           />
         </div>
 
+        {/* USERS GRID */}
         <div className="users-grid">
           {filtered.map(user => (
-            <div key={user.id} className="user-card">
-              <div className="user-info">
-                <div className="avatar">
-                  {user.email[0].toUpperCase()}
-                </div>
-                <div className="user-details">
-                  <h3>{user.email}</h3>
-                  <span className={`status ${user.status.toLowerCase()}`}>
-                    {user.status}
-                  </span>
-                  <button
-                    className="below"
-                    onClick={() => setDeleteModal(user)}
-                  >
-                    Delete
-                  </button>
-                </div>
-              </div>
-            </div>
+           <div key={user.id} className="user-card">
+
+  <div className="user-info">
+
+    {/* Avatar */}
+    <div className="avatar">
+      {(user.name ? user.name[0] : user.email[0]).toUpperCase()}
+    </div>
+
+    <div className="user-details">
+      
+      {/* NAME (fallback to email username if null) */}
+      <h3 className="user-name">
+        {user.name && user.name.trim() !== ""
+          ? user.name
+          : user.email.split("@")[0]}
+      </h3>
+
+      {/* EMAIL */}
+      <p className="user-email">
+        {user.email}
+      </p>
+
+      <button
+        className="below"
+        onClick={() => setDeleteModal(user)}
+      >
+        Delete
+      </button>
+    </div>
+  </div>
+</div>
+
           ))}
         </div>
 
-        {filtered.length === 0 && <p className="no-results">No users found</p>}
+        {filtered.length === 0 && (
+          <p className="no-results">No users found</p>
+        )}
       </div>
 
-      {/* MODAL */}
+      {/* DELETE MODAL */}
       {deleteModal && (
         <div className="modal-overlay" onClick={() => setDeleteModal(null)}>
           <div className="modal" onClick={e => e.stopPropagation()}>
+
             <div className="modal-header">
               <h2>Delete User?</h2>
             </div>
+
             <div className="modal-body">
-              <p>Are you sure you want to delete?</p>
+              {/* Name + Email Preview */}
               <div className="user-preview">
-                <strong>{deleteModal.email}</strong><br/>
-                <span className={`status ${deleteModal.status.toLowerCase()}`}>
-                  {deleteModal.status}
-                </span>
+                <strong>
+                  {deleteModal.name
+                    ? deleteModal.name
+                    : deleteModal.email.split("@")[0]}
+                </strong>
+                <br />
+                <span>{deleteModal.email}</span>
               </div>
-              <p className="warning">This action <strong>cannot be undone</strong>.</p>
+
+              <p className="warning">
+                This action <strong>cannot be undone</strong>.
+              </p>
             </div>
+
             <div className="modal-actions">
-              <button className="cancel-btn" onClick={() => setDeleteModal(null)}>Cancel</button>
+              <button className="cancel-btn" onClick={() => setDeleteModal(null)}>
+                Cancel
+              </button>
               <button className="confirm-delete-btn" onClick={handleDelete}>
                 Yes, Delete
               </button>
             </div>
+
           </div>
         </div>
       )}

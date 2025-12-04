@@ -54,10 +54,7 @@ const HomePage = () => {
                 <p class="hero-description">
                   Nurturing curiosity and knowledge from fundamental concepts to advanced discoveries.
                 </p>
-                <div class="hero-actions">
-                  <button class="cta-button">Join Now</button>
-                  <button class="secondary-button">Start Free Trial →</button>
-                </div>
+                
               </div>
               <div class="hero-visual">
                 Effective = <span class="fraction">
