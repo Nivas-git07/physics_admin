@@ -58,7 +58,7 @@ body {
 }
 
 /* Cards Container */
-.cards-container {
+/* .cards-container {
   display: flex;
   justify-content: center;
   gap: 30px;
@@ -67,7 +67,7 @@ body {
 }
 
 /* Card Styles */
-.card {
+/* .card {
   width: 380px;
   background: white;
   border-radius: 24px;
@@ -75,9 +75,9 @@ body {
   overflow: hidden;
   opacity: 0.5;
   transition: all 0.4s;
-}
+} */
 
-.card.active {
+/* .card.active {
   opacity: 1;
   transform: translateY(-10px);
   box-shadow: 0 20px 50px rgba(0,191,165,0.2);
@@ -89,10 +89,10 @@ body {
   font-size: 28px;
   color: #00bfa5;
   font-weight: 600;
-}
+} */
 
 /* Card Body */
-.card-body {
+/* .card-body {
   padding: 30px;
 }
 
@@ -103,7 +103,7 @@ body {
   border: 2px solid #eee;
   border-radius: 16px;
   font-size: 16px;
-}
+}  */
 
 .date-input {
   padding: 16px 18px !important;

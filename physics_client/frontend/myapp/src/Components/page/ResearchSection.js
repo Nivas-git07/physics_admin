@@ -90,19 +90,7 @@ const ResearchSection = () => {
       </div>
 
       {/* About Section */}
-      <div className="about-section">
-        <h3>About Us</h3>
-        <p>
-          Alsana Physics Tuition Centre is a dedicated institute located at
-          <b> 640/5, 4th Cross Street, R.R. Nagar, Thiruppalai, Madurai – 14.</b>{" "}
-          We focus on helping students build strong conceptual understanding and
-          problem-solving skills in Physics. Guided by{" "}
-          <b>Dr. M. Ismail Fathima (M.Sc., M.Ed., M.Phil., Ph.D.)</b>, our
-          centre provides quality coaching for Classes 10, 11, and 12 (CBSE,
-          ICSE & State Board), ensuring every student achieves academic
-          excellence with confidence.
-        </p>
-      </div>
+      
     </div>
   );
 };
