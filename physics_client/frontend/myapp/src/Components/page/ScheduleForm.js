@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../css/ScheduleForm.css";
 import Navbar from "./Navbar";
-import FooterSection from "./FooterSection";
+import Footer from "../../pagecomponent/footer/footer";
 
 export default function ScheduleForm() {
   const [step, setStep] = useState(1);
@@ -180,97 +180,99 @@ export default function ScheduleForm() {
         </div>
 
         <div className="cards-container">
-          {step === 1 && (
-            <div className="card active">
-              <h1>Calendar & Subject Detail</h1>
-              <div className="card-body">
-                <input placeholder="Subject" value={subject} onChange={e => setSubject(e.target.value)} />
-                <input placeholder="Topic" value={topic} onChange={e => setTopic(e.target.value)} />
-                <input type="date" value={date} onChange={e => setDate(e.target.value)} />
+  {step === 1 && (
+    <div className="schedule-card active">
+      <h1>Calendar & Subject Detail</h1>
+      <div className="schedule-card-body">
+        <input placeholder="Subject" value={subject} onChange={e => setSubject(e.target.value)} />
+        <input placeholder="Topic" value={topic} onChange={e => setTopic(e.target.value)} />
+        <input type="date" value={date} onChange={e => setDate(e.target.value)} />
 
-                <div className="time-row">
-                  <div className="time-box">
-                    <label>Start Time</label>
-                    <input type="time" value={startTime} onChange={e => setStartTime(e.target.value)} />
-                  </div>
-                  <div className="time-box">
-                    <label>End Time</label>
-                    <input type="time" value={endTime} onChange={e => setEndTime(e.target.value)} />
-                  </div>
-                </div>
-
-                <div className="btn-row" style={{ justifyContent: "center" }}>
-                  <button className="next-btn large-btn" onClick={next}>Next →</button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {step === 2 && (
-            <div className="card active">
-              <h1>Select People</h1>
-              <div className="card-body people-body">
-                <input
-                  className="search-box"
-                  placeholder="Search email..."
-                  value={search}
-                  onChange={e => setSearch(e.target.value)}
-                />
-                <div className="select-all-row">
-                  <button className="select-btn" onClick={selectAll}>Select All</button>
-                  <button className="select-btn" onClick={deselectAll}>Deselect All</button>
-                </div>
-
-                <div className="people-scroll">
-                  {filtered.map((p, i) => (
-                    <div
-                      key={i}
-                      className={`person-row ${selectedEmails.includes(p.email) ? "selected" : ""}`}
-                      onClick={() => togglePerson(p.email)}
-                    >
-                      <div className="profile-icon">{p.name ? p.name[0].toUpperCase() : p.email[0].toUpperCase()}</div>
-                      <div className="person-info">
-                        <div className="name">{p.name || p.email.split("@")[0]}</div>
-                        <div className="email">{p.email}</div>
-                      </div>
-                      {selectedEmails.includes(p.email) && <span className="selected-check">✓</span>}
-                    </div>
-                  ))}
-                </div>
-
-                <div className="btn-row" style={{ justifyContent: "center" }}>
-                  <button className="back-btn large-btn" onClick={back}>← Back</button>
-                  <button className="next-btn large-btn" onClick={next}>Next →</button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {step === 3 && (
-            <div className="card active">
-              <h1>Confirm Details</h1>
-              <div className="card-body confirm-body">
-                <div className="summary">
-                  <h3>{subject}</h3>
-                  <p><strong>Topic:</strong> {topic}</p>
-                  <p><strong>Date:</strong> {date}</p>
-                  <p className="time-display">
-                    <strong>Time:</strong> {formatTimeForBackend(startTime)} - {formatTimeForBackend(endTime)}
-                  </p>
-                  <p><strong>Participants:</strong> {selectedEmails.length}</p>
-                </div>
-
-                <div className="btn-row" style={{ justifyContent: "center", flexDirection: "column", gap: "10px" }}>
-                  <button className="back-btn large-btn" onClick={back}>← Back</button>
-                  <button className="create-btn large-btn" onClick={createSchedule}>Create Schedule</button>
-                </div>
-              </div>
-            </div>
-          )}
+        <div className="time-row">
+          <div className="time-box">
+            <label>Start Time</label>
+            <input type="time" value={startTime} onChange={e => setStartTime(e.target.value)} />
+          </div>
+          <div className="time-box">
+            <label>End Time</label>
+            <input type="time" value={endTime} onChange={e => setEndTime(e.target.value)} />
+          </div>
         </div>
 
-        <FooterSection />
+        <div className="btn-row" style={{ justifyContent: "center" }}>
+          <button className="next-btn large-btn" onClick={next}>Next →</button>
+        </div>
       </div>
+    </div>
+  )}
+
+  {step === 2 && (
+    <div className="schedule-card active">
+      <h1>Select People</h1>
+      <div className="schedule-card-body schedule-card-people">
+        <input
+          className="search-box"
+          placeholder="Search email..."
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+        />
+        <div className="select-all-row">
+          <button className="select-btn" onClick={selectAll}>Select All</button>
+          <button className="select-btn" onClick={deselectAll}>Deselect All</button>
+        </div>
+
+        <div className="people-scroll">
+          {filtered.map((p, i) => (
+            <div
+              key={i}
+              className={`person-row ${selectedEmails.includes(p.email) ? "selected" : ""}`}
+              onClick={() => togglePerson(p.email)}
+            >
+              <div className="profile-icon">{p.name ? p.name[0].toUpperCase() : p.email[0].toUpperCase()}</div>
+              <div className="person-info">
+                <div className="name">{p.name || p.email.split("@")[0]}</div>
+                <div className="email">{p.email}</div>
+              </div>
+              {selectedEmails.includes(p.email) && <span className="selected-check">✓</span>}
+            </div>
+          ))}
+        </div>
+
+        <div className="btn-row" style={{ justifyContent: "center" }}>
+          <button className="back-btn large-btn" onClick={back}>← Back</button>
+          <button className="next-btn large-btn" onClick={next}>Next →</button>
+        </div>
+      </div>
+    </div>
+  )}
+
+  {step === 3 && (
+    <div className="schedule-card active">
+      <h1>Confirm Details</h1>
+      <div className="schedule-card-body schedule-card-confirm">
+        <div className="summary">
+          <h3>{subject}</h3>
+          <p><strong>Topic:</strong> {topic}</p>
+          <p><strong>Date:</strong> {date}</p>
+          <p className="time-display">
+            <strong>Time:</strong> {formatTimeForBackend(startTime)} - {formatTimeForBackend(endTime)}
+          </p>
+          <p><strong>Participants:</strong> {selectedEmails.length}</p>
+        </div>
+
+        <div className="btn-row" style={{ justifyContent: "center", flexDirection: "column", gap: "10px" }}>
+          <button className="back-btn large-btn" onClick={back}>← Back</button>
+          <button className="create-btn large-btn" onClick={createSchedule}>Create Schedule</button>
+        </div>
+      </div>
+    </div>
+  )}
+</div>
+
+
+        
+      </div>
+      <Footer />
     </>
   );
 }

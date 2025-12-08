@@ -70,38 +70,42 @@ export default function UserList() {
         {/* USERS GRID */}
         <div className="users-grid">
           {filtered.map(user => (
-           <div key={user.id} className="user-card">
+            <div key={user.id} className="user-card">
 
-  <div className="user-info">
+              <div className="user-info">
 
-    {/* Avatar */}
-    <div className="avatar">
-      {(user.name ? user.name[0] : user.email[0]).toUpperCase()}
-    </div>
+                {/* Avatar */}
+                <div className="avatar">
+                  {(user.name ? user.name[0] : user.email[0]).toUpperCase()}
+                </div>
 
-    <div className="user-details">
-      
-      {/* NAME (fallback to email username if null) */}
-      <h3 className="user-name">
-        {user.name && user.name.trim() !== ""
-          ? user.name
-          : user.email.split("@")[0]}
-      </h3>
+                <div className="user-details">
 
-      {/* EMAIL */}
-      <p className="user-email">
-        {user.email}
-      </p>
+                  {/* NAME (fallback to email username if null) */}
+                  <h3 className="user-name">
+                    {user.name && user.name.trim() !== ""
+                      ? user.name
+                      : user.email.split("@")[0]}
+                  </h3>
 
-      <button
-        className="below"
-        onClick={() => setDeleteModal(user)}
-      >
-        Delete
-      </button>
-    </div>
-  </div>
-</div>
+                  {/* EMAIL */}
+                  <p className="user-email">
+                    {user.email}
+                  </p>
+
+
+                  <button
+                  className="delete-btn"
+                  onClick={() => setDeleteModal(user)}
+                >
+                  Delete
+                </button>
+
+
+                </div>
+                
+              </div>
+            </div>
 
           ))}
         </div>

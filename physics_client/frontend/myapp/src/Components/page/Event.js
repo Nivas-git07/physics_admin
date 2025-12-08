@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import FooterSection from "./FooterSection";
 import NoClassBox from "./NoClassBox"; // add this import
+import Footer from "../../pagecomponent/footer/footer";
+
 
 export default function Event() {
   const [eventData, setEventData] = useState(null);
@@ -153,7 +155,7 @@ export default function Event() {
           </div>
         </div>
       </div>
-      <FooterSection />
+      <Footer />
     </div>
   );
 }
