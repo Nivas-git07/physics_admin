@@ -10,6 +10,7 @@ export default function ScheduleForm() {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [loadingSchedule, setLoadingSchedule] = useState(false);
+  const [showPeoplePopup, setShowPeoplePopup] = useState(false);
 
   const [subject, setSubject] = useState("");
   const [topic, setTopic] = useState("");
@@ -43,7 +44,7 @@ export default function ScheduleForm() {
   // Safe fallback: if people is undefined or not an array, use empty array
   const safePeople = Array.isArray(people) ? people : [];
   const filtered = safePeople.filter((p) =>
-    p.email.toLowerCase().includes(search.toLowerCase())
+    p.email.toLowerCase().includes(search.toLowerCase()) || (p.name && p.name.toLowerCase().includes(search.toLowerCase()))
   );
 
   const togglePerson = (email) => {
@@ -62,12 +63,30 @@ export default function ScheduleForm() {
       alert("Fill all fields");
       return;
     }
-    if (step === 2 && selectedEmails.length === 0) {
-      alert("Select at least one person");
+    if (step === 1) {
+      setShowPeoplePopup(true);
       return;
     }
     setStep(step + 1);
   };
+
+  const closePopup = () => {
+    setShowPeoplePopup(false);
+    setSearch("");
+  };
+const proceedFromPopup = () => {
+  if (selectedEmails.length === 0) {
+    alert("Select at least one person");
+    return;
+  }
+  closePopup();
+  setStep(2);
+
+  // Prevent page from scrolling down automatically
+  setTimeout(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 100);
+};
 
   const back = () => setStep(step - 1);
 
@@ -145,7 +164,7 @@ export default function ScheduleForm() {
       <Navbar />
       <div className="main-container">
 
-        {/* Overlay Popup */}
+        {/* Existing Overlay Popup for loading/success */}
         {loadingSchedule || scheduleCreated ? (
           <div className="overlay">
             <div className="overlay-content">
@@ -166,6 +185,59 @@ export default function ScheduleForm() {
             </div>
           </div>
         ) : null}
+{/* New People Selection Popup - Fully Responsive */}
+{showPeoplePopup && (
+  <div className="overlay" onClick={(e) => e.target === e.currentTarget && closePopup()}>
+    <div className="people-popup">
+      {/* Header with X button */}
+      <div className="popup-header">
+        <h2>Add Peoples</h2>
+        <button className="popup-close-btn" onClick={closePopup}>
+          ×
+        </button>
+      </div>
+
+      {/* Search Row - Improved for mobile */}
+      <div className="popup-search-row">
+        <input
+          className="popup-search"
+          placeholder="Search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <button className="clear-all-btn" onClick={deselectAll}>
+          Clear All
+        </button>
+      </div>
+
+      <div className="popup-section-title">Suggested</div>
+
+      <div className="popup-people-list">
+        {filtered.map((p, i) => (
+          <div
+            key={i}
+            className={`popup-person-row ${selectedEmails.includes(p.email) ? "selected" : ""}`}
+            onClick={() => togglePerson(p.email)}
+          >
+            <div className="popup-profile-icon">
+              <div className="fallback-icon">
+                {p.name ? p.name[0].toUpperCase() : p.email[0].toUpperCase()}
+              </div>
+            </div>
+            <div className="popup-person-info">
+              <div className="popup-name">{p.name || p.email.split("@")[0]}</div>
+              <div className="popup-status">{p.email}</div>
+            </div>
+            <div className={`popup-radio ${selectedEmails.includes(p.email) ? "checked" : ""}`}></div>
+          </div>
+        ))}
+      </div>
+
+      <button className="proceed-btn" onClick={proceedFromPopup}>Proceed</button>
+    </div>
+  </div>
+)}
+   
 
         {/* Step Progress */}
         <div className="top-progress">
@@ -180,97 +252,54 @@ export default function ScheduleForm() {
         </div>
 
         <div className="cards-container">
-  {step === 1 && (
-    <div className="schedule-card active">
-      <h1>Calendar & Subject Detail</h1>
-      <div className="schedule-card-body">
-        <input placeholder="Subject" value={subject} onChange={e => setSubject(e.target.value)} />
-        <input placeholder="Topic" value={topic} onChange={e => setTopic(e.target.value)} />
-        <input type="date" value={date} onChange={e => setDate(e.target.value)} />
+          {step === 1 && (
+            <div className="schedule-card active">
+              <h1>Calendar & Subject Detail</h1>
+              <div className="schedule-card-body">
+                <input placeholder="Subject" value={subject} onChange={e => setSubject(e.target.value)} />
+                <input placeholder="Topic" value={topic} onChange={e => setTopic(e.target.value)} />
+                <input type="date" value={date} onChange={e => setDate(e.target.value)} />
 
-        <div className="time-row">
-          <div className="time-box">
-            <label>Start Time</label>
-            <input type="time" value={startTime} onChange={e => setStartTime(e.target.value)} />
-          </div>
-          <div className="time-box">
-            <label>End Time</label>
-            <input type="time" value={endTime} onChange={e => setEndTime(e.target.value)} />
-          </div>
-        </div>
+                <div className="time-row">
+                  <div className="time-box">
+                    <label>Start Time</label>
+                    <input type="time" value={startTime} onChange={e => setStartTime(e.target.value)} />
+                  </div>
+                  <div className="time-box">
+                    <label>End Time</label>
+                    <input type="time" value={endTime} onChange={e => setEndTime(e.target.value)} />
+                  </div>
+                </div>
 
-        <div className="btn-row" style={{ justifyContent: "center" }}>
-          <button className="next-btn large-btn" onClick={next}>Next →</button>
-        </div>
-      </div>
-    </div>
-  )}
-
-  {step === 2 && (
-    <div className="schedule-card active">
-      <h1>Select People</h1>
-      <div className="schedule-card-body schedule-card-people">
-        <input
-          className="search-box"
-          placeholder="Search email..."
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-        />
-        <div className="select-all-row">
-          <button className="select-btn" onClick={selectAll}>Select All</button>
-          <button className="select-btn" onClick={deselectAll}>Deselect All</button>
-        </div>
-
-        <div className="people-scroll">
-          {filtered.map((p, i) => (
-            <div
-              key={i}
-              className={`person-row ${selectedEmails.includes(p.email) ? "selected" : ""}`}
-              onClick={() => togglePerson(p.email)}
-            >
-              <div className="profile-icon">{p.name ? p.name[0].toUpperCase() : p.email[0].toUpperCase()}</div>
-              <div className="person-info">
-                <div className="name">{p.name || p.email.split("@")[0]}</div>
-                <div className="email">{p.email}</div>
+                <div className="btn-row" style={{ justifyContent: "center" }}>
+                  <button className="next-btn large-btn" onClick={next}>Next →</button>
+                </div>
               </div>
-              {selectedEmails.includes(p.email) && <span className="selected-check">✓</span>}
             </div>
-          ))}
+          )}
+
+          {step === 2 && (
+            <div className="schedule-card active">
+              <h1>Confirm Details</h1>
+              <div className="schedule-card-body schedule-card-confirm">
+                <div className="summary">
+                  <h3>{subject}</h3>
+                  <p><strong>Topic:</strong> {topic}</p>
+                  <p><strong>Date:</strong> {date}</p>
+                  <p className="time-display">
+                    <strong>Time:</strong> {formatTimeForBackend(startTime)} - {formatTimeForBackend(endTime)}
+                  </p>
+                  <p><strong>Participants:</strong> {selectedEmails.length}</p>
+                </div>
+
+                <div className="btn-row" style={{ justifyContent: "center", flexDirection: "column", gap: "10px" }}>
+                  <button className="back-btn large-btn" onClick={back}>← Back</button>
+                  <button className="create-btn large-btn" onClick={createSchedule}>Create Schedule</button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-
-        <div className="btn-row" style={{ justifyContent: "center" }}>
-          <button className="back-btn large-btn" onClick={back}>← Back</button>
-          <button className="next-btn large-btn" onClick={next}>Next →</button>
-        </div>
-      </div>
-    </div>
-  )}
-
-  {step === 3 && (
-    <div className="schedule-card active">
-      <h1>Confirm Details</h1>
-      <div className="schedule-card-body schedule-card-confirm">
-        <div className="summary">
-          <h3>{subject}</h3>
-          <p><strong>Topic:</strong> {topic}</p>
-          <p><strong>Date:</strong> {date}</p>
-          <p className="time-display">
-            <strong>Time:</strong> {formatTimeForBackend(startTime)} - {formatTimeForBackend(endTime)}
-          </p>
-          <p><strong>Participants:</strong> {selectedEmails.length}</p>
-        </div>
-
-        <div className="btn-row" style={{ justifyContent: "center", flexDirection: "column", gap: "10px" }}>
-          <button className="back-btn large-btn" onClick={back}>← Back</button>
-          <button className="create-btn large-btn" onClick={createSchedule}>Create Schedule</button>
-        </div>
-      </div>
-    </div>
-  )}
-</div>
-
-
-        
       </div>
       <Footer />
     </>

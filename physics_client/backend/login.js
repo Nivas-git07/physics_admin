@@ -745,6 +745,51 @@ app.get("/api/forms", async (req, res) => {
     res.status(500).json({ success: false });
   }
 });
+app.post("/form", async (req, res) => {
+  const {
+    name,
+    birthdate,
+    gender,
+    currentaddress,
+    phoneno,
+    email,
+    parentname,
+    relationship,
+    parentphoneno,
+    parentemail,
+    CurrentSchool,
+    currentgrade,
+    course,
+    classtime,
+    classmode,
+  } = req.body;
+  try {
+    await pool.query(
+      "INSERT INTO form (name,birthdate,gender,currentaddress,phoneno,email,parentname,relationship,parentphoneno,parentemail,CurrentSchool,currentgrade,course,classtime,classmode) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15)",
+      [
+        name,
+        birthdate,
+        gender,
+        currentaddress,
+        phoneno,
+        email,
+        parentname,
+        relationship,
+        parentphoneno,
+        parentemail,
+        CurrentSchool,
+        currentgrade,
+        course,
+        classtime,
+        classmode,
+      ]
+    );
+    res.status(200).json({ message: "Form submitted successfully" });
+  } catch (err) {
+    console.error("Error inserting form data:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
 
 // DELETE form
 app.delete("/api/forms/:id", async (req, res) => {
