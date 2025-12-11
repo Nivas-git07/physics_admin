@@ -262,7 +262,7 @@ app.post("/confrom-password", async (req, res) => {
   }
 });
 
-app.post("/api/google", async (req, res) => {
+app.post("/google", async (req, res) => {
   const { token } = req.body;
   try {
     const ticket = await client.verifyIdToken({
@@ -647,7 +647,7 @@ function auth(req, res, next) {
     return res.status(401).json({ message: "Invalid token" });
   }
 }
-app.get("/api/admin/users", async (req, res) => {
+app.get("/admin/users", async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT login.email, form.name
@@ -668,7 +668,7 @@ app.get("/api/admin/users", async (req, res) => {
 });
 
 // 2. DELETE USER BY ID
-app.delete("/api/admin/delete-user/:id", async (req, res) => {
+app.delete("/admin/delete-user/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -737,7 +737,7 @@ app.get("/schedule", async (req, res) => {
     res.status(500).json({ message: "internal server error" });
   }
 });
-app.get("/api/forms", async (req, res) => {
+app.get("/forms", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM form ORDER BY created_at DESC");
     res.json({ success: true, forms: result.rows });
@@ -792,7 +792,7 @@ app.post("/form", async (req, res) => {
 });
 
 // DELETE form
-app.delete("/api/forms/:id", async (req, res) => {
+app.delete("/forms/:id", async (req, res) => {
   const { id } = req.params;
   try {
     await pool.query("DELETE FROM form WHERE id = $1", [id]);
