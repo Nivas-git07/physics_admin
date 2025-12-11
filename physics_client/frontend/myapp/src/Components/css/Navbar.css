@@ -1,11 +1,11 @@
-/* Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* Navbar.css - FINAL CLEAN VERSION */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+a, button, .nav-link {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
-/* Header */
 .headers {
   position: sticky;
   top: 0;
@@ -13,109 +13,155 @@
   background: #EEFFFC;
   height: 80px;
   width: 100%;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.3s ease;
 }
 
-/* Scroll Style */
 .headers.scrolled {
   background: rgba(238, 255, 252, 0.98);
   backdrop-filter: blur(10px);
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
-/* Navbar container */
 .navbar {
   height: 100%;
   max-width: 1400px;
-  width: 100%;
   margin: auto;
-  padding: 0 80px;
-
+  padding: 0 24px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  position: relative;
 }
-
 
 .logo {
   font-family: "Poppins", sans-serif;
   font-weight: 700;
   font-size: 32px;
-  text-decoration: none;
   color: #009687;
-  letter-spacing: 1px;
+  text-decoration: none;
+  z-index: 1001;
 }
 
-
+/* Desktop Menu */
 .nav-links {
-  flex: 1;
-  display: flex;
-  justify-content: center;
   gap: 3rem;
   list-style: none;
+  flex: 1;
+  justify-content: center;
 }
 
 .nav-link {
-  position: relative;
   font-family: "Poppins", sans-serif;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 500;
   color: #455764;
   text-decoration: none;
-  transition: 0.3s ease;
-  padding: 8px 0;
+  padding: 10px 16px;
+  border-radius: 8px;
+  transition: color 0.3s ease;
 }
 
-.nav-link:hover,
-.nav-link.active {
-  color: #009687;
+/* Desktop: Hover & Active = Light green text only */
+.desktop-only .nav-link:hover,
+.desktop-only .nav-link.active {
+  color: #a8e6cf !important;
+  background: transparent;
 }
 
-/* Underline effect */
-.nav-link:hover,
-.nav-link.active {
-  color: #009687;
+/* Optional: slight scale on hover for better feel */
+.desktop-only .nav-link:hover {
+  transform: scale(1.05);
 }
-
-/* Email / Login Button */
 .email {
-  min-width: 160px;
-  text-align: right;
-}
-
-.email span {
   font-family: "Poppins", sans-serif;
   font-size: 1.1rem;
   font-weight: 600;
   color: #374046;
 }
 
-/* Sign In Button */
-.login-btn {
-
-  color: white !important;
-
-  text-decoration: none;
-  transition: 0.3s ease;
+/* Mobile Toggle */
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #009687;
+  cursor: pointer;
+  z-index: 1001;
 }
 
-.login-btn:hover {
-  background: #009687;
-  /* transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(0, 160, 140, 0.28); */
+/* Mobile Menu */
+.mobile-menu {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  width: 100%;
+  background: rgba(238, 255, 252, 0.98);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 2rem 0;
+  text-align: center;
+  transform: translateY(-100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s ease;
 }
 
-/* Responsive */
+.mobile-menu.open {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+.mobile-nav-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 0 20px;
+}
+
+.mobile-nav-links .nav-link {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #455764;
+  padding: 16px 20px;
+  border-radius: 12px;
+  display: block;
+  transition: all 0.25s ease;
+}
+
+/* Mobile Hover & Tap = Background + Darker Text */
+.mobile-nav-links .nav-link:hover,
+.mobile-nav-links .nav-link:active {
+  background: #d0f5e0 !important;
+  color: #009687 !important;
+  transform: scale(0.97);
+}
+
+/* Active page in mobile */
+.mobile-nav-links .nav-link.active {
+  background: #a8e6cf !important;
+  color: #006b5c !important;
+  font-weight: 700;
+}
+
+.mobile-email {
+  margin-top: 2rem;
+  font-size: 1.2rem;
+  color: #009687;
+  font-weight: 600;
+}
+
+/* RESPONSIVE - Hide desktop, show mobile */
 @media (max-width: 900px) {
-  .navbar {
-    padding: 0 20px;
+  .desktop-only {
+    display: none !important;
   }
+  .mobile-menu-toggle {
+    display: block;
+  }
+}
 
-  .nav-links {
-    gap: 1.8rem;
-  }
-
-  .nav-link {
-    font-size: 1.05rem;
-  }
+@media (max-width: 480px) {
+  .logo { font-size: 28px; }
 }

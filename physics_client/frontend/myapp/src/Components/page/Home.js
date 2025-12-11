@@ -85,13 +85,7 @@ const HomePage = () => {
                   advanced discoveries.
                 </p>
 
-                <div className="hero-actions">
-                  {!formSubmitted && (
-                    <button className="cta-button" onClick={handleJoin}>
-                      Join Now
-                    </button>
-                  )}
-                </div>
+                
               </div>
 
               <div className="hero-visual">

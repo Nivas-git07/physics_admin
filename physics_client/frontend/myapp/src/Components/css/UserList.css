@@ -1,289 +1,306 @@
-  /* src/css/UserList.css */
-  .userlist-container {
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 20px;
-    background: #f5fffe;
-    min-height: 100vh;
-    font-family: 'Poppins', sans-serif;
-  }
+/* ================================================= */
+/* UserList.css – SUPER PREMIUM MOBILE UI (2025)    */
+/* Looks AMAZING on iPhone & Android                */
+/* ================================================= */
 
-  .header {
-    text-align: center;
-    margin-bottom: 40px;
-  }
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
-  .header h1 {
-    color: #00bfa5;
-    font-size: 2.6rem;
-    margin-bottom: 8px;
-  }
-
-  .header p {
-    color: #555;
-    font-size: 1.2rem;
-  }
-
-  .search-bar {
-    margin-bottom: 30px;
-  }
-
-  .search-bar input {
-    width: 100%;
-    padding: 16px 20px;
-    font-size: 1.1rem;
-    border: 2px solid #e0e0e0;
-    border-radius: 16px;
-    outline: none;
-  }
-
-  .search-bar input:focus {
-    border-color: #00bfa5;
-    box-shadow: 0 0 0 4px rgba(0,191,165,0.15);
-  }
-
-  .users-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-    gap: 22px;
-  }
-
-  .user-card {
-    background: white;
-    border-radius: 28px;
-    padding: 22px 28px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.06);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    transition: all 0.3s ease;
-    border: 1px solid #f0f0f0;
-  }
-
-  .delete-btn {
-  background: #fff4e6; /* cream */
-  color: #d35400;
-  border: none;
-  padding: 8px 20px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-  margin-left: 150px;
-  margin-top: 15px;
-  position: relative;
-  top:5px;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.delete-btn:hover {
-  background: #ffd9b3;
+.userlist-container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background: linear-gradient(135deg, #f8fffe 0%, #f0fffc 100%);
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+  padding: 0 16px;
+}
+
+.header h1 {
+  color: #00bfa5;
+  font-size: 2.4rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.header p {
+  color: #555;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+/* Floating Search Bar – iOS Style */
+.search-bar {
+  position: sticky;
+  top: 10px;
+  z-index: 10;
+  margin-bottom: 24px;
+  padding: 0 16px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 18px 20px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 8px 25px rgba(0, 191, 165, 0.15);
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.search-bar input:focus {
+  box-shadow: 0 12px 35px rgba(0, 191, 165, 0.25);
   transform: translateY(-2px);
 }
 
-  .user-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0,191,165,0.18);
+/* Users Grid – Mobile: Full Width Cards */
+.users-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+  padding: 0 16px;
+}
+
+/* User Card – Mobile Optimized */
+.user-card {
+  background: white;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0, 191, 165, 0.12);
+  border: 1px solid #f0fffc;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.user-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 6px;
+  height: 100%;
+  background: linear-gradient(to bottom, #00bfa5, #00897b);
+  border-radius: 24px 0 0 24px;
+}
+
+.user-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 45px rgba(0, 191, 165, 0.2);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.avatar {
+  width: 68px;
+  height: 68px;
+  background: linear-gradient(135deg, #00bfa5, #00897b);
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  flex-shrink: 0;
+}
+
+.user-details {
+  flex: 1;
+}
+
+.user-name {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #222;
+  margin: 0 0 6px 0;
+}
+
+.user-email {
+  font-size: 1rem;
+  color: #666;
+  margin: 0;
+  word-break: break-all;
+}
+
+/* Delete Button – Beautiful & Safe */
+.delete-btn {
+  background: linear-gradient(135deg, #fff4e6, #ffe0cc);
+  color: #e67e22;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 16px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(230, 126, 34, 0.2);
+  margin-top: 16px;
+}
+
+.delete-btn:hover {
+  background: linear-gradient(135deg, #ffd9b3, #ffc48c);
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 8px 25px rgba(230, 126, 34, 0.3);
+}
+
+.delete-btn:active {
+  transform: translateY(-1px);
+}
+
+/* No Results */
+.no-results {
+  text-align: center;
+  padding: 80px 20px;
+  color: #999;
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 120px 20px;
+  font-size: 1.4rem;
+  color: #00bfa5;
+  font-weight: 600;
+}
+
+/* MODAL – iOS/Android Style */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.modal {
+  background: white;
+  border-radius: 28px;
+  width: 100%;
+  max-width: 420px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+  animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes modalPop {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modal-header {
+  background: linear-gradient(135deg, #ff5252, #e53935);
+  color: white;
+  padding: 28px 24px;
+  text-align: center;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.modal-body {
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.user-preview {
+  background: #fff5f5;
+  padding: 20px;
+  border-radius: 18px;
+  margin: 20px 0;
+  font-size: 1.1rem;
+  border: 2px dashed #ff5252;
+}
+
+.warning {
+  color: #d32f2f;
+  font-weight: 600;
+  margin-top: 16px;
+  font-size: 1.05rem;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 16px;
+  padding: 0 24px 32px;
+}
+
+.cancel-btn,
+.confirm-delete-btn {
+  flex: 1;
+  padding: 18px;
+  border: none;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cancel-btn {
+  background: #f0f0f0;
+  color: #555;
+}
+
+.confirm-delete-btn {
+  background: linear-gradient(135deg, #ff5252, #e53935);
+  color: white;
+  box-shadow: 0 6px 20px rgba(255, 82, 82, 0.4);
+}
+
+.confirm-delete-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(255, 82, 82, 0.5);
+}
+
+/* ================================================= */
+/* DESKTOP – Keep your original beautiful layout     */
+/* ================================================= */
+@media (min-width: 769px) {
+  .users-grid {
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 28px;
+    padding: 0;
   }
 
-  .user-info {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    flex: 1;
+  .user-card {
+    padding: 10px;
+    border-radius: 32px;
   }
 
-  .avatar {
-    width: 56px;
-    height: 56px;
-    background: linear-gradient(135deg, #00bfa5, #00897b);
-    color: white;
-    font-size: 22px;
-    font-weight: bold;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 12px rgba(0,191,165,0.4);
-    flex-shrink: 0;
+  .search-bar {
+    position: static;
+    padding: 0;
   }
 
-  .user-details h3 {
-    margin: 0;
-    font-size: 1.15rem;
-    margin-top: 10px;
-    position: relative;
-    top: 15px;
-    color: #222;
-    font-weight: 600;
+  .search-bar input {
+    box-shadow: 0 10px 30px rgba(0, 191, 165, 0.12);
   }
-  .user-email{
-    position: relative;
-    top: 15px;
-  }
-
- .user-details.user-name {
-  margin-top: 20px;
- }
-  .status {
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 0.82rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-  }
-
-  .status.active {
-    background: #e8f5f3;
-    color: #00695c;
-  }
-
-  .status.inactive {
-    background: #ffebee;
-    color: #c62828
-  }
-  .below{
-      margin-left: 10px;
-  }
-
-  .below:hover{
-      color: white;
-      background-color: black;
-      
-  }
-  .delete-btn {
-    background: #ff5252;
-    color: white;
-    border: none;
-    padding: 11px 28px;
-    border-radius: 50px;
-    font-size: 0.95rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s;
-    box-shadow: 0 4px 15px rgba(255,82,82,0.3);
-  }
-
-  .delete-btn:hover {
-    background: #e53935;
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 10px 25px rgba(255,82,82,0.4);
-  }
-
-  .no-results {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 80px;
-    color: #999;
-    font-size: 1.4rem;
-  }
-
-  /* MODAL - Same as before (beautiful) */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.7);
-    backdrop-filter: blur(8px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-  }
-
-  .modal {
-    background: white;
-    border-radius: 24px;
-    width: 90%;
-    max-width: 480px;
-    overflow: hidden;
-    box-shadow: 0 30px 80px rgba(0,0,0,0.35);
-    animation: pop 0.4s ease;
-  }
-
-  @keyframes pop {
-    from { transform: scale(0.8); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-  }
-
-  .modal-header {
-    background: #ff5252;
-    color: white;
-    padding: 24px;
-    text-align: center;
-  }
-
-  .modal-header h2 { margin: 0; font-size: 1.8rem; }
-
-  .modal-body {
-    padding: 30px;
-    text-align: center;
-  }
-
-  .user-preview {
-    background: #f8f9fa;
-    padding: 18px;
-    border-radius: 16px;
-    margin: 20px 0;
-    font-size: 1.1rem;
-  }
-
-  .warning {
-    color: #d32f2f;
-    margin-top: 15px;
-  }
-
-  .modal-actions {
-    display: flex;
-    gap: 16px;
-    padding: 0 30px 30px;
-  }
-
-  .cancel-btn, .confirm-delete-btn {
-    flex: 1;
-    padding: 16px;
-    border: none;
-    border-radius: 50px;
-    font-weight: bold;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-
-  .cancel-btn {
-    background: #e0e0e0;
-  }
-
-  .confirm-delete-btn {
-    background: #ff5252;
-    color: white;
-  }
-
-  .confirm-delete-btn:hover {
-    background: #e53935;
-  }
-
-  .loading {
-    text-align: center;
-    padding: 100px;
-    font-size: 1.6rem;
-    color: #00bfa5;
-  }
-
-  .delete-btn {
-    background: #fff4e6; /* Cream color */
-    color: #d35400;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  }
-
-  .delete-btn:hover {
-    background: #ffe0cc;
-    transform: translateY(-1px);
-  }
+}

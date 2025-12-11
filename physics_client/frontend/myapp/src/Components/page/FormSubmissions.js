@@ -44,12 +44,12 @@ export default function FormSubmissions() {
     <>
       <Navbar />
       <div className="submissions-container">
-
         <h1 className="title">All Form Submissions</h1>
         <p className="subtitle">Total: <strong>{forms.length}</strong> students registered</p>
 
         <div className="table-container">
-          <table className="submissions-table">
+          {/* Desktop Table – Only visible on large screens */}
+          <table className="submissions-table desktop-only">
             <thead>
               <tr>
                 <th>Student Name</th>
@@ -74,10 +74,7 @@ export default function FormSubmissions() {
                       {new Date(form.created_at).toLocaleDateString('en-IN')}
                     </td>
                     <td>
-                      <button
-                        className="delete-small-btn"
-                        onClick={() => setDeleteId(form.id)}
-                      >
+                      <button className="delete-small-btn" onClick={() => setDeleteId(form.id)}>
                         Delete
                       </button>
                     </td>
@@ -86,9 +83,36 @@ export default function FormSubmissions() {
               )}
             </tbody>
           </table>
+
+          {/* Mobile Cards – Only visible on mobile */}
+          <div className="submissions-cards mobile-only">
+            {forms.length === 0 ? (
+              <div className="no-data">No submissions yet</div>
+            ) : (
+              forms.map(form => (
+                <div key={form.id} className="submission-card">
+                  <div className="card-header">
+                    <div className="card-name">{form.name || "Unnamed Student"}</div>
+                    <div className="card-course">{form.course || "No Course"}</div>
+                  </div>
+                  <div className="card-date">
+                    {new Date(form.created_at).toLocaleDateString('en-IN')}
+                  </div>
+                  <div className="card-actions">
+                    <button className="view-btn" onClick={() => setSelected(form)}>
+                      View Details
+                    </button>
+                    <button className="delete-card-btn" onClick={() => setDeleteId(form.id)}>
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
 
-        {/* === BEAUTIFUL DETAIL MODAL === */}
+        {/* Detail Modal */}
         {selected && (
           <div className="modal-overlay" onClick={() => setSelected(null)}>
             <div className="detail-modal" onClick={e => e.stopPropagation()}>
@@ -124,7 +148,7 @@ export default function FormSubmissions() {
           </div>
         )}
 
-        {/* === DELETE CONFIRM MODAL === */}
+        {/* Delete Confirm Modal */}
         {deleteId && (
           <div className="modal-overlay" onClick={() => setDeleteId(null)}>
             <div className="confirm-modal" onClick={e => e.stopPropagation()}>
