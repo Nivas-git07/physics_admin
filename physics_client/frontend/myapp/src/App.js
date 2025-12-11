@@ -33,7 +33,6 @@ function App() {
         <Route path="/users" element={<UserList/>}/>
         <Route path="/detail" element={<FormSubmissions/>}/>
 
-
       </Routes>
     </Router>
   );
