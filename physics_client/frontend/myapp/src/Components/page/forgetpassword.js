@@ -22,7 +22,7 @@ export default function ForgotPassword() {
     try {
       console.log("Sending request to backend...");
 
-      const response = await fetch("http://localhost:5000/forget-password", {
+      const response = await fetch("https://admin.selfmade.technology/api/forget-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),

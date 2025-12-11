@@ -22,7 +22,7 @@ export default function ScheduleForm() {
   const [meetingLink, setMeetingLink] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:5000/schedule")
+    fetch("https://admin.selfmade.technology/api/schedule")
       .then((res) => res.json())
       .then((data) => {
         // Ensure data.users is an array; if not, fallback to empty array

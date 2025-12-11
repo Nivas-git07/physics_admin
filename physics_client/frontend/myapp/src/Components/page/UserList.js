@@ -15,7 +15,7 @@ export default function UserList() {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/admin/users");
+      const res = await fetch("https://admin.selfmade.technology/api/admin/users");
       const data = await res.json();
       if (data.success) setUsers(data.users);
     } catch (err) {
@@ -29,7 +29,7 @@ export default function UserList() {
     if (!deleteModal) return;
     try {
       const res = await fetch(
-        `http://localhost:5000/api/admin/delete-user/${deleteModal.id}`,
+        `https://admin.selfmade.technology/api/admin/delete-user/${deleteModal.id}`,
         { method: "DELETE" }
       );
       const result = await res.json();

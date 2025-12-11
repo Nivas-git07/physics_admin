@@ -21,7 +21,7 @@ export default function Navbar() {
           setLoading(false);
           return;
         }
-        const res = await fetch("http://localhost:5000/home", {
+        const res = await fetch("https://admin.selfmade.technology/api/home", {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (res.ok) {

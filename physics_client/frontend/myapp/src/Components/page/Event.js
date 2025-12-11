@@ -13,7 +13,7 @@ export default function Event() {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch("http://localhost:5000/event", {
+    fetch("https://admin.selfmade.technology/api/event", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
