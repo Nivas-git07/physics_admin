@@ -538,6 +538,7 @@ app.get("/home", auth, async (req, res) => {
     res.status(500).json({ message: "internal server error" });
   }
 });
+
 function mergeDateAndTime(dateStr, timeStr) {
   const [day, month, year] = dateStr.split("/");
   let [time, modifier] = timeStr.split(" ");
@@ -571,7 +572,6 @@ app.post("/gmeet", async (req, res) => {
     const emailEnd = formatTime(endDateObj);
     const emailDate = formatDate(startDateObj);
     console.log("Node Server Time:", new Date().toString());
-
 
     // 1️⃣ Validate input
     if (!email || !class_name || !start || !end) {
@@ -654,15 +654,15 @@ app.get("/admin/users", async (req, res) => {
       FROM login
       LEFT JOIN form ON login.email = form.email
     `);
-    res.json({ 
-      success: true, 
-      users: result.rows 
+    res.json({
+      success: true,
+      users: result.rows,
     });
   } catch (err) {
     console.error("Error fetching users:", err);
-    res.status(500).json({ 
-      success: false, 
-      message: "Failed to load users" 
+    res.status(500).json({
+      success: false,
+      message: "Failed to load users",
     });
   }
 });
@@ -678,28 +678,27 @@ app.delete("/admin/delete-user/:id", async (req, res) => {
     );
 
     if (result.rowCount === 0) {
-      return res.json({ 
-        success: false, 
-        message: "User not found" 
+      return res.json({
+        success: false,
+        message: "User not found",
       });
     }
 
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       message: "User deleted successfully",
-      deletedUser: result.rows[0]
+      deletedUser: result.rows[0],
     });
-
   } catch (err) {
     console.error("Delete error:", err);
-    res.status(500).json({ 
-      success: false, 
-      message: "Database error" 
+    res.status(500).json({
+      success: false,
+      message: "Database error",
     });
   }
 });
 
-app.get("/event",auth, async (req, res) => {
+app.get("/event", auth, async (req, res) => {
   try {
     const { emails } = req.user.email;
 
@@ -722,24 +721,37 @@ app.get("/event",auth, async (req, res) => {
   }
 });
 
-
 app.get("/schedule", async (req, res) => {
   try {
     const result = await pool.query(`
-      SELECT login.email, form.name
-      FROM login
-      LEFT JOIN form ON login.email = form.email
+      SELECT DISTINCT ON (email)
+          name,
+          email
+      FROM (
+          SELECT name, email_id AS email FROM gauth
+          UNION ALL
+          SELECT COALESCE(form.name, '') AS name, login.email
+          FROM login
+          LEFT JOIN form ON login.email = form.email
+      ) AS combined
+      ORDER BY email, name DESC
     `);
 
+    console.log(result.rows);
     return res.status(200).json({ users: result.rows });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "internal server error" });
   }
 });
+
+
+
 app.get("/forms", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM form ORDER BY created_at DESC");
+    const result = await pool.query(
+      "SELECT * FROM form ORDER BY created_at DESC"
+    );
     res.json({ success: true, forms: result.rows });
   } catch (err) {
     res.status(500).json({ success: false });
@@ -805,13 +817,15 @@ app.delete("/forms/:id", async (req, res) => {
 cron.schedule("*/2 * * * *", async () => {
   try {
     const result = await pool.query(`DELETE FROM gmeet WHERE end_time < NOW()`);
-    console.log(`Deleted ${result.rowCount} expired events at ${new Date().toLocaleString()}`);
+    console.log(
+      `Deleted ${
+        result.rowCount
+      } expired events at ${new Date().toLocaleString()}`
+    );
   } catch (err) {
     console.error("Error deleting expired events:", err);
   }
 });
-
-
 
 app.listen(PORT, () => {
   console.log(`http://localhost:${PORT} `);
