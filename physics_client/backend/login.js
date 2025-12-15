@@ -650,10 +650,19 @@ function auth(req, res, next) {
 app.get("/admin/users", async (req, res) => {
   try {
     const result = await pool.query(`
-      SELECT login.email, form.name
-      FROM login
-      LEFT JOIN form ON login.email = form.email
+      SELECT DISTINCT ON (email) 
+             name,
+             email
+      FROM (
+          SELECT COALESCE(name, 'User') AS name, email_id AS email FROM gauth
+          UNION ALL
+          SELECT COALESCE(form.name, 'User') AS name, login.email AS email
+          FROM login
+          LEFT JOIN form ON login.email = form.email
+      ) AS combined
+      ORDER BY email, name DESC
     `);
+
     res.json({
       success: true,
       users: result.rows,
@@ -667,27 +676,35 @@ app.get("/admin/users", async (req, res) => {
   }
 });
 
-// 2. DELETE USER BY ID
-app.delete("/admin/delete-user/:id", async (req, res) => {
-  const { id } = req.params;
+
+app.delete("/admin/delete-user/:email", async (req, res) => {
+  const { email} = req.params;
+  console.log("Deleting user with email:", email);
 
   try {
-    const result = await pool.query(
-      "DELETE FROM login WHERE id = $1 RETURNING email, status",
-      [id]
+    // Delete from login table
+    const loginResult = await pool.query(
+      "DELETE FROM login WHERE email = $1 RETURNING email",
+      [email]
     );
 
-    if (result.rowCount === 0) {
-      return res.json({
+    // Delete from gauth table
+    const gauthResult = await pool.query(
+      "DELETE FROM gauth WHERE email_id = $1 RETURNING email_id",
+      [email]
+    );
+
+    if (loginResult.rowCount === 0 && gauthResult.rowCount === 0) {
+      return res.status(404).json({
         success: false,
-        message: "User not found",
+        message: "User not found in both tables",
       });
     }
 
     res.json({
       success: true,
       message: "User deleted successfully",
-      deletedUser: result.rows[0],
+      deletedUser: loginResult.rows[0] || gauthResult.rows[0],
     });
   } catch (err) {
     console.error("Delete error:", err);
@@ -697,6 +714,7 @@ app.delete("/admin/delete-user/:id", async (req, res) => {
     });
   }
 });
+
 
 app.get("/event", auth, async (req, res) => {
   try {
@@ -744,8 +762,6 @@ app.get("/schedule", async (req, res) => {
     res.status(500).json({ message: "internal server error" });
   }
 });
-
-
 
 app.get("/forms", async (req, res) => {
   try {

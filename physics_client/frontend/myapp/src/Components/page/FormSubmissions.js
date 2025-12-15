@@ -15,7 +15,7 @@ export default function FormSubmissions() {
 
   const fetchForms = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/forms");
+      const res = await fetch("http://localhost:5000/forms");
       const data = await res.json();
       if (data.success) setForms(data.forms);
     } catch (err) {
@@ -29,7 +29,7 @@ export default function FormSubmissions() {
   const handleDelete = async () => {
     if (!deleteId) return;
     try {
-      await fetch(`http://localhost:5000/api/forms/${deleteId}`, { method: "DELETE" });
+      await fetch(`http://localhost:5000/forms/${deleteId}`, { method: "DELETE" });
       setForms(prev => prev.filter(f => f.id !== deleteId));
       setDeleteId(null);
       alert("Deleted successfully!");
