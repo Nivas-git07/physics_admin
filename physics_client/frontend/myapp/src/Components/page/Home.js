@@ -22,6 +22,7 @@ import {
 import Navbar from "./Navbar";
 
 
+
 const HomePage = () => {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const navigate = useNavigate();

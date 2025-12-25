@@ -86,7 +86,7 @@ body {
 .navbar a:visited,
 .navbar a:focus,
 .navbar a:active {
-  color: #6e7a87 !important;
+  color: #6e7a87 ;
   text-decoration: none !important;
 }
 
@@ -96,7 +96,7 @@ body {
   font-family: 'Alsina', sans-serif;
   font-weight: bold;
   font-size: 25px;
-  color: #00bfa6;
+  color: #00bfa6 !important;
 
 }
 

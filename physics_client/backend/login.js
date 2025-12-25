@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 5001;
 
 app.use(
   cors({
-    origin: "*", // your frontend URL
+    origin: "http://localhost:3000", // your frontend URL
     credentials: true, // allow cookies / auth
   })
 );
@@ -37,230 +37,11 @@ pool
   });
 const JWT_SECRET = "supersecret";
 
-app.post("/register", async (req, res) => {
-  const { email, password } = req.body;
-  const checkingemail = await pool.query("SELECT * FROM login WHERE email=$1", [
-    email,
-  ]);
 
-  if (checkingemail.rows.length > 0) {
-    res.status(400).json({ message: "email already exists" });
-    return;
-  }
 
-  const otp = Math.floor(100000 + Math.random() * 900000);
-  const now = new Date();
-  const formatted = now.toISOString();
-  const hashedPassword = await bcrypt.hash(password, 10);
-  try {
-    const existingOtp = await pool.query(
-      "SELECT * FROM userotp WHERE email=$1",
-      [email]
-    );
 
-    await pool.query("INSERT INTO login (email, password) VALUES ($1, $2)", [
-      email,
-      hashedPassword,
-    ]);
 
-    if (existingOtp.rows.length > 0) {
-      await pool.query(
-        "UPDATE userotp SET otp=$1, created_at=$2 WHERE email=$3",
-        [otp, now, email]
-      );
-      console.log("OTP updated successfully");
-    } else {
-      await pool.query(
-        "INSERT INTO userotp (email, otp, created_at) VALUES ($1, $2, $3)",
-        [email, otp, now]
-      );
-      console.log("OTP inserted successfully");
-    }
-    try {
-      await axios.post(
-        "https://obito231.app.n8n.cloud/webhook/dfc8b298-9d96-4926-af10-6211d0c0ece0",
-        {
-          email: email,
-          otp: otp,
-        }
-      );
-      res.json({ message: "OTP sent to n8n successfully!" });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Failed to send OTP to n8n" });
-    }
-  } catch (err) {
-    console.error("Error inserting OTP:", err.message);
-    res.status(500).json({ error: "Internal server error" });
-    return;
-  }
 
-  app.post("/verify", async (req, res) => {
-    const { email, checkotp } = req.body;
-
-    try {
-      const result = await pool.query(
-        "SELECT otp, created_at FROM userotp WHERE email=$1",
-        [email]
-      );
-
-      if (result.rows.length === 0) {
-        return res
-          .status(400)
-          .json({ message: "OTP not found or already expired" });
-      }
-
-      const userOtp = result.rows[0];
-
-      const now = new Date();
-      const createdAt = new Date(userOtp.created_at);
-      const timeDiff = now - createdAt;
-
-      if (timeDiff > 300000) {
-        await pool.query("DELETE FROM userotp WHERE email=$1", [email]);
-        return res.status(400).json({ message: "OTP expired" });
-      }
-      if (userOtp.otp != checkotp) {
-        return res.status(400).json({ message: "Invalid OTP" });
-      }
-      const userStatus = await pool.query(
-        "SELECT status FROM login WHERE email=$1",
-        [email]
-      );
-      if (userStatus.rows[0].status === "ACTIVE") {
-        await pool.query("DELETE FROM userotp WHERE email=$1", [email]);
-        return res
-          .status(201)
-          .json({ message: "otp verfied for forget password" });
-      } else {
-        const registerUser = await pool.query(
-          "UPDATE login SET status='ACTIVE' WHERE email=$1",
-          [email]
-        );
-        await pool.query("DELETE FROM userotp WHERE email=$1", [email]);
-        return res.status(200).json({ message: "Registration successful" });
-      }
-    } catch (error) {
-      console.error("Error verifying OTP:", error.message);
-      res.status(500).json({ message: "Internal server error" });
-    }
-  });
-});
-
-app.post("/forget-password", async (req, res) => {
-  const { email } = req.body;
-  console.log("Received email for password reset:", email);
-
-  // Check email exists
-  const checkingemail = await pool.query("SELECT * FROM login WHERE email=$1", [
-    email,
-  ]);
-
-  if (checkingemail.rows[0].status !== "ACTIVE") {
-    return res.status(403).json({
-      message: "Please register your account first by verifying OTP",
-    });
-  }
-
-  if (checkingemail.rows.length === 0) {
-    return res.status(400).json({ message: "Email does not exist" });
-  }
-
-  const otp = Math.floor(100000 + Math.random() * 900000);
-  const now = new Date();
-
-  try {
-    await axios.post(
-      "https://obito231.app.n8n.cloud/webhook/dfc8b298-9d96-4926-af10-6211d0c0ece0",
-      {
-        email: email,
-        otp: otp,
-      }
-    );
-    console.log(otp);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Failed to send OTP to n8n" });
-  }
-
-  try {
-    const existingOtp = await pool.query(
-      "SELECT * FROM userotp WHERE email=$1",
-      [email]
-    );
-
-    if (existingOtp.rows.length > 0) {
-      await pool.query(
-        "UPDATE userotp SET otp=$1, created_at=$2 WHERE email=$3",
-        [otp, now, email]
-      );
-    } else {
-      await pool.query(
-        "INSERT INTO userotp (email, otp, created_at) VALUES ($1, $2, $3)",
-        [email, otp, now]
-      );
-    }
-
-    return res.status(200).json({
-      message: "OTP generated successfully",
-      success: true,
-    });
-  } catch (error) {
-    console.error("Error inserting OTP:", error.message);
-    return res.status(500).json({
-      message: "Internal server error",
-      success: false,
-    });
-  }
-});
-
-// app.post("/reset-password", async (req, res) => {
-//   const { email, resetotp } = req.body;
-//   try {
-//     const result = await pool.query(
-//       "SELECT otp, created_at FROM userotp WHERE email=$1",
-//       [email]
-//     );
-//     console.log(result.rows[0].otp);
-//     console.log(resetotp);
-
-//     const userotp = result.rows[0];
-//     const now = new Date();
-//     const createdAt = new Date(userotp.created_at);
-//     const timeDiff = now - createdAt;
-
-//     if (timeDiff > 300000) {
-//       await pool.query("DELETE FROM userotp WHERE email=$1", [email]);
-//       return res.status(400).json({ message: "OTP expired" });
-//     }
-//     if (resetotp != result.rows[0].otp) {
-//       return res.status(400).json({ message: "Invalid OTP" });
-//     }
-//     res.json({ message: "OTP verified successfully" });
-//     await pool.query("DELETE FROM userotp WHERE email=$1", [email]);
-//   } catch (error) {
-//     console.error("Error verifying OTP:", error.message);
-//     res.status(500).json({ message: "reset otp error" });
-//   }
-// });
-
-app.post("/confrom-password", async (req, res) => {
-  const { email, newPassword } = req.body;
-  console.log(email, newPassword);
-  const newhashedpassword = await bcrypt.hash(newPassword, 10);
-  try {
-    await pool.query("UPDATE login SET password=$1 WHERE email=$2", [
-      newhashedpassword,
-      email,
-    ]);
-
-    return res.status(200).json({ message: "Password reset successfully" });
-    console.log("Password reset successfully");
-  } catch (error) {
-    console.error("Error resetting password:", error.message);
-    res.status(500).json({ message: "password error" });
-  }
-});
 
 app.post("/google", async (req, res) => {
   const { token } = req.body;
@@ -290,7 +71,7 @@ app.post("/google", async (req, res) => {
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   try {
-    const result = await pool.query("SELECT * FROM login WHERE email=$1", [
+    const result = await pool.query("SELECT * FROM admin WHERE email=$1", [
       email,
     ]);
     if (result.rows.length === 0) {
@@ -306,11 +87,7 @@ app.post("/login", async (req, res) => {
     });
     console.log("Generated JWT Token:", token);
 
-    if (result.rows[0].status !== "ACTIVE") {
-      return res.status(403).json({
-        message: "Please register your account first by verifying OTP",
-      });
-    }
+    
 
     res.status(200).json({ message: "successful", token });
   } catch (error) {
@@ -538,6 +315,7 @@ app.get("/home", auth, async (req, res) => {
     res.status(500).json({ message: "internal server error" });
   }
 });
+
 function mergeDateAndTime(dateStr, timeStr) {
   const [day, month, year] = dateStr.split("/");
   let [time, modifier] = timeStr.split(" ");
@@ -571,7 +349,6 @@ app.post("/gmeet", async (req, res) => {
     const emailEnd = formatTime(endDateObj);
     const emailDate = formatDate(startDateObj);
     console.log("Node Server Time:", new Date().toString());
-
 
     // 1️⃣ Validate input
     if (!email || !class_name || !start || !end) {
@@ -650,56 +427,73 @@ function auth(req, res, next) {
 app.get("/admin/users", async (req, res) => {
   try {
     const result = await pool.query(`
-      SELECT login.email, form.name
-      FROM login
-      LEFT JOIN form ON login.email = form.email
+      SELECT DISTINCT ON (email) 
+             name,
+             email
+      FROM (
+          SELECT COALESCE(name, 'User') AS name, email AS email FROM gauth
+          UNION ALL
+          SELECT COALESCE(form.name, 'User') AS name, login.email AS email
+          FROM login
+          LEFT JOIN form ON login.email = form.email
+      ) AS combined
+      ORDER BY email, name DESC
     `);
-    res.json({ 
-      success: true, 
-      users: result.rows 
+
+    res.json({
+      success: true,
+      users: result.rows,
     });
   } catch (err) {
     console.error("Error fetching users:", err);
-    res.status(500).json({ 
-      success: false, 
-      message: "Failed to load users" 
+    res.status(500).json({
+      success: false,
+      message: "Failed to load users",
     });
   }
 });
 
-// 2. DELETE USER BY ID
-app.delete("/admin/delete-user/:id", async (req, res) => {
-  const { id } = req.params;
+
+app.delete("/admin/delete-user/:email", async (req, res) => {
+  const { email} = req.params;
+  console.log("Deleting user with email:", email);
 
   try {
-    const result = await pool.query(
-      "DELETE FROM login WHERE id = $1 RETURNING email, status",
-      [id]
+    // Delete from login table
+    const loginResult = await pool.query(
+      "DELETE FROM login WHERE email = $1 RETURNING email",
+      [email]
     );
 
-    if (result.rowCount === 0) {
-      return res.json({ 
-        success: false, 
-        message: "User not found" 
+    // Delete from gauth table
+    const gauthResult = await pool.query(
+      "DELETE FROM gauth WHERE email = $1 RETURNING email",
+      [email]
+    );
+
+    if (loginResult.rowCount === 0 && gauthResult.rowCount === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found in both tables",
       });
     }
 
-    res.json({ 
-      success: true, 
+    res.json({
+      success: true,
       message: "User deleted successfully",
-      deletedUser: result.rows[0]
+      deletedUser: loginResult.rows[0] || gauthResult.rows[0],
     });
-
   } catch (err) {
     console.error("Delete error:", err);
-    res.status(500).json({ 
-      success: false, 
-      message: "Database error" 
+    res.status(500).json({
+      success: false,
+      message: "Database error",
     });
   }
 });
 
-app.get("/event",auth, async (req, res) => {
+
+app.get("/event", auth, async (req, res) => {
   try {
     const { emails } = req.user.email;
 
@@ -722,24 +516,35 @@ app.get("/event",auth, async (req, res) => {
   }
 });
 
-
 app.get("/schedule", async (req, res) => {
   try {
     const result = await pool.query(`
-      SELECT login.email, form.name
-      FROM login
-      LEFT JOIN form ON login.email = form.email
+      SELECT DISTINCT ON (email)
+          name,
+          email
+      FROM (
+          SELECT name, email AS email FROM gauth
+          UNION ALL
+          SELECT COALESCE(form.name, '') AS name, login.email
+          FROM login
+          LEFT JOIN form ON login.email = form.email
+      ) AS combined
+      ORDER BY email, name DESC
     `);
 
+    console.log(result.rows);
     return res.status(200).json({ users: result.rows });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "internal server error" });
   }
 });
+
 app.get("/forms", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM form ORDER BY created_at DESC");
+    const result = await pool.query(
+      "SELECT * FROM form ORDER BY created_at DESC"
+    );
     res.json({ success: true, forms: result.rows });
   } catch (err) {
     res.status(500).json({ success: false });
@@ -805,13 +610,15 @@ app.delete("/forms/:id", async (req, res) => {
 cron.schedule("*/2 * * * *", async () => {
   try {
     const result = await pool.query(`DELETE FROM gmeet WHERE end_time < NOW()`);
-    console.log(`Deleted ${result.rowCount} expired events at ${new Date().toLocaleString()}`);
+    console.log(
+      `Deleted ${
+        result.rowCount
+      } expired events at ${new Date().toLocaleString()}`
+    );
   } catch (err) {
     console.error("Error deleting expired events:", err);
   }
 });
-
-
 
 app.listen(PORT, () => {
   console.log(`http://localhost:${PORT} `);

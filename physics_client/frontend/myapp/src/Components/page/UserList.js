@@ -25,16 +25,22 @@ export default function UserList() {
     }
   };
 
+  // ✅ DELETE USING EMAIL (SAFE)
   const handleDelete = async () => {
     if (!deleteModal) return;
+
     try {
       const res = await fetch(
-        `https://admin.selfmade.technology/api/admin/delete-user/${deleteModal.id}`,
+        `https://admin.selfmade.technology/api/admin/delete-user/${deleteModal.email}`,
         { method: "DELETE" }
       );
+
       const result = await res.json();
+
       if (result.success) {
-        setUsers(prev => prev.filter(u => u.id !== deleteModal.id));
+        setUsers(prev =>
+          prev.filter(u => u.email !== deleteModal.email)
+        );
         setDeleteModal(null);
       }
     } catch (err) {
@@ -55,7 +61,9 @@ export default function UserList() {
       <div className="userlist-container">
         <div className="header">
           <h1>Manage Users</h1>
-          <p>Total: <strong>{users.length}</strong> users</p>
+          <p>
+            Total: <strong>{users.length}</strong> users
+          </p>
         </div>
 
         <div className="search-bar">
@@ -70,18 +78,16 @@ export default function UserList() {
         {/* USERS GRID */}
         <div className="users-grid">
           {filtered.map(user => (
-            <div key={user.id} className="user-card">
-
+            // ✅ KEY SHOULD BE EMAIL
+            <div key={user.email} className="user-card">
               <div className="user-info">
-
                 {/* Avatar */}
                 <div className="avatar">
                   {(user.name ? user.name[0] : user.email[0]).toUpperCase()}
                 </div>
 
                 <div className="user-details">
-
-                  {/* NAME (fallback to email username if null) */}
+                  {/* NAME */}
                   <h3 className="user-name">
                     {user.name && user.name.trim() !== ""
                       ? user.name
@@ -89,24 +95,17 @@ export default function UserList() {
                   </h3>
 
                   {/* EMAIL */}
-                  <p className="user-email">
-                    {user.email}
-                  </p>
-
+                  <p className="user-email">{user.email}</p>
 
                   <button
-                  className="delete-btn"
-                  onClick={() => setDeleteModal(user)}
-                >
-                  Delete
-                </button>
-
-
+                    className="delete-btn"
+                    onClick={() => setDeleteModal(user)}
+                  >
+                    Delete
+                  </button>
                 </div>
-                
               </div>
             </div>
-
           ))}
         </div>
 
@@ -119,13 +118,11 @@ export default function UserList() {
       {deleteModal && (
         <div className="modal-overlay" onClick={() => setDeleteModal(null)}>
           <div className="modal" onClick={e => e.stopPropagation()}>
-
             <div className="modal-header">
               <h2>Delete User?</h2>
             </div>
 
             <div className="modal-body">
-              {/* Name + Email Preview */}
               <div className="user-preview">
                 <strong>
                   {deleteModal.name
@@ -142,14 +139,19 @@ export default function UserList() {
             </div>
 
             <div className="modal-actions">
-              <button className="cancel-btn" onClick={() => setDeleteModal(null)}>
+              <button
+                className="cancel-btn"
+                onClick={() => setDeleteModal(null)}
+              >
                 Cancel
               </button>
-              <button className="confirm-delete-btn" onClick={handleDelete}>
+              <button
+                className="confirm-delete-btn"
+                onClick={handleDelete}
+              >
                 Yes, Delete
               </button>
             </div>
-
           </div>
         </div>
       )}

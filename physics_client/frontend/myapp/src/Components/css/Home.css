@@ -109,29 +109,9 @@ body {
   padding: 0;
 }
 
-.nav-link:hover,
-.nav-link.active {
-  color: #00bfa6 !important;
-  /* Teal on hover/active */
-}
-
-/* Remove browser default link colors for nav section */
-.navbar a:visited,
-.navbar a:focus,
-.navbar a:active {
-  color: #6e7a87 !important;
-  text-decoration: none !important;
-}
 
 
 
-.logo {
-  font-family: 'Alsina', sans-serif;
-  font-weight: bold;
-  font-size: 25px;
-  color: #00bfa6;
-
-}
 
 .email {
   font-family: 'Poppins', sans-serif;

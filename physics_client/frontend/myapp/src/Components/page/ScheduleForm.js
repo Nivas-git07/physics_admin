@@ -5,7 +5,7 @@ import Footer from "../../pagecomponent/footer/footer";
 
 export default function ScheduleForm() {
   const [step, setStep] = useState(1);
-  const [people, setPeople] = useState([]);     // initialize as empty array
+  const [people, setPeople] = useState([]);     
   const [selectedEmails, setSelectedEmails] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
@@ -14,9 +14,9 @@ export default function ScheduleForm() {
 
   const [subject, setSubject] = useState("");
   const [topic, setTopic] = useState("");
-  const [date, setDate] = useState(""); // yyyy-mm-dd
-  const [startTime, setStartTime] = useState(""); // HH:MM 24h
-  const [endTime, setEndTime] = useState(""); // HH:MM 24h
+  const [date, setDate] = useState(""); 
+  const [startTime, setStartTime] = useState(""); 
+  const [endTime, setEndTime] = useState(""); 
 
   const [scheduleCreated, setScheduleCreated] = useState(false);
   const [meetingLink, setMeetingLink] = useState("");
@@ -25,27 +25,30 @@ export default function ScheduleForm() {
     fetch("https://admin.selfmade.technology/api/schedule")
       .then((res) => res.json())
       .then((data) => {
-        // Ensure data.users is an array; if not, fallback to empty array
         if (data && Array.isArray(data.users)) {
           setPeople(data.users);
         } else {
-          console.warn("Unexpected data.users:", data.users);
           setPeople([]);
         }
         setLoading(false);
       })
       .catch((err) => {
-        console.error("Failed to fetch schedule users:", err);
-        setPeople([]);     // fallback to empty array on error
+        console.error(err);
+        setPeople([]);
         setLoading(false);
       });
   }, []);
 
-  // Safe fallback: if people is undefined or not an array, use empty array
   const safePeople = Array.isArray(people) ? people : [];
-  const filtered = safePeople.filter((p) =>
-    p.email.toLowerCase().includes(search.toLowerCase()) || (p.name && p.name.toLowerCase().includes(search.toLowerCase()))
-  );
+  
+  
+
+  const filtered = safePeople.filter((p) => {
+    const email = p?.email?.toLowerCase() || "";
+    const name = p?.name?.toLowerCase() || "";
+    const s = search.toLowerCase();
+    return email.includes(s) || name.includes(s);
+  });
 
   const togglePerson = (email) => {
     setSelectedEmails((prev) =>
@@ -55,8 +58,12 @@ export default function ScheduleForm() {
     );
   };
 
-  const selectAll = () => setSelectedEmails(filtered.map((p) => p.email));
-  const deselectAll = () => setSelectedEmails([]);
+const selectAll = () => {
+  // Select all filtered people
+  setSelectedEmails(filtered.map((p) => p.email));
+};
+const deselectAll = () => setSelectedEmails([]);
+
 
   const next = () => {
     if (step === 1 && (!subject || !topic || !date || !startTime || !endTime)) {
@@ -74,34 +81,34 @@ export default function ScheduleForm() {
     setShowPeoplePopup(false);
     setSearch("");
   };
-const proceedFromPopup = () => {
-  if (selectedEmails.length === 0) {
-    alert("Select at least one person");
-    return;
-  }
-  closePopup();
-  setStep(2);
 
-  // Prevent page from scrolling down automatically
-  setTimeout(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, 100);
-};
+  const proceedFromPopup = () => {
+    if (selectedEmails.length === 0) {
+      alert("Select at least one person");
+      return;
+    }
+    closePopup();
+    setStep(2);
+
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
+  };
 
   const back = () => setStep(step - 1);
 
   const formatDateForBackend = (dateStr) => {
     if (!dateStr) return "";
-    const [year, month, day] = dateStr.split("-");
-    return `${day}/${month}/${year}`;
+    const [y, m, d] = dateStr.split("-");
+    return `${d}/${m}/${y}`;
   };
 
   const formatTimeForBackend = (timeStr) => {
     if (!timeStr) return "";
-    let [hour, minute] = timeStr.split(":").map(Number);
-    const ampm = hour >= 12 ? "PM" : "AM";
-    hour = hour % 12 || 12;
-    return `${hour}:${minute.toString().padStart(2, "0")} ${ampm}`;
+    let [h, min] = timeStr.split(":").map(Number);
+    const ampm = h >= 12 ? "PM" : "AM";
+    h = h % 12 || 12;
+    return `${h}:${min.toString().padStart(2, "0")} ${ampm}`;
   };
 
   const createSchedule = async () => {
@@ -123,7 +130,7 @@ const proceedFromPopup = () => {
     };
 
     try {
-      const res = await fetch("http://localhost:5000/gmeet", {
+      const res = await fetch("https://admin.selfmade.technology/api/gmeet", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -140,7 +147,6 @@ const proceedFromPopup = () => {
       }
     } catch (err) {
       setLoadingSchedule(false);
-      console.error("Error sending schedule:", err);
       alert("Something went wrong!");
     }
   };
@@ -164,8 +170,8 @@ const proceedFromPopup = () => {
       <Navbar />
       <div className="main-container">
 
-        {/* Existing Overlay Popup for loading/success */}
-        {loadingSchedule || scheduleCreated ? (
+        {/* Schedule creation overlay */}
+        {(loadingSchedule || scheduleCreated) && (
           <div className="overlay">
             <div className="overlay-content">
               {!scheduleCreated && (
@@ -184,20 +190,18 @@ const proceedFromPopup = () => {
               )}
             </div>
           </div>
-        ) : null}
-{/* New People Selection Popup - Fully Responsive */}
+        )}
+
+        {/* People Selection Popup */}
+     {/* People Selection Popup */}
 {showPeoplePopup && (
   <div className="overlay" onClick={(e) => e.target === e.currentTarget && closePopup()}>
     <div className="people-popup">
-      {/* Header with X button */}
       <div className="popup-header">
         <h2>Add Peoples</h2>
-        <button className="popup-close-btn" onClick={closePopup}>
-          ×
-        </button>
+        <button className="popup-close-btn" onClick={closePopup}>×</button>
       </div>
 
-      {/* Search Row - Improved for mobile */}
       <div className="popup-search-row">
         <input
           className="popup-search"
@@ -205,6 +209,10 @@ const proceedFromPopup = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
+        {/* ⭐ Added Select All button */}
+        <button className="select-all-btn" onClick={selectAll}>
+          Select All
+        </button>
         <button className="clear-all-btn" onClick={deselectAll}>
           Clear All
         </button>
@@ -212,34 +220,46 @@ const proceedFromPopup = () => {
 
       <div className="popup-section-title">Suggested</div>
 
+      {/* People List */}
       <div className="popup-people-list">
-        {filtered.map((p, i) => (
-          <div
-            key={i}
-            className={`popup-person-row ${selectedEmails.includes(p.email) ? "selected" : ""}`}
-            onClick={() => togglePerson(p.email)}
-          >
-            <div className="popup-profile-icon">
-              <div className="fallback-icon">
-                {p.name ? p.name[0].toUpperCase() : p.email[0].toUpperCase()}
+        {filtered.map((p, i) => {
+          const firstLetter =
+            p?.name?.[0]?.toUpperCase() ||
+            p?.email?.[0]?.toUpperCase() ||
+            "?";
+          const displayName = p?.name || "User";
+          const displayEmail = p?.email || "No Email";
+
+          return (
+            <div
+              key={i}
+              className={`popup-person-row ${selectedEmails.includes(p.email) ? "selected" : ""}`}
+              onClick={() => togglePerson(p.email)}
+            >
+              <div className="popup-profile-icon">
+                <div className="fallback-icon">{firstLetter}</div>
               </div>
+
+              <div className="popup-person-info">
+                <div className="popup-name">{displayName}</div>
+                <div className="popup-status">{displayEmail}</div>
+              </div>
+
+              <div className={`popup-radio ${selectedEmails.includes(p.email) ? "checked" : ""}`}></div>
             </div>
-            <div className="popup-person-info">
-              <div className="popup-name">{p.name || p.email.split("@")[0]}</div>
-              <div className="popup-status">{p.email}</div>
-            </div>
-            <div className={`popup-radio ${selectedEmails.includes(p.email) ? "checked" : ""}`}></div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
-      <button className="proceed-btn" onClick={proceedFromPopup}>Proceed</button>
+      <button className="proceed-btn" onClick={proceedFromPopup}>
+        Proceed
+      </button>
     </div>
   </div>
 )}
-   
 
-        {/* Step Progress */}
+
+        {/* Steps and form */}
         <div className="top-progress">
           {[1, 2, 3].map((i) => (
             <div key={i} className="progress-item">
@@ -300,6 +320,7 @@ const proceedFromPopup = () => {
             </div>
           )}
         </div>
+
       </div>
       <Footer />
     </>
