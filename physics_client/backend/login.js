@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const { Pool } = require("pg");
 const cors = require("cors");
 require("dotenv").config();
+const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
 const { OAuth2Client } = require("google-auth-library");
@@ -36,6 +37,13 @@ pool
     process.exit(1);
   });
 const JWT_SECRET = "supersecret";
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_APP_PASSWORD,
+  },
+});
 
 app.post("/register", async (req, res) => {
   const { email, password } = req.body;
@@ -565,7 +573,15 @@ function formatDate(dateObj) {
 }
 app.post("/gmeet", async (req, res) => {
   try {
-    const { email, class_name, date, start, end } = req.body;
+    const {
+  email,
+  class_name,
+  date,
+  start,
+  end,
+  meeting_link
+} = req.body;
+
     const startDateObj = mergeDateAndTime(req.body.date, req.body.start);
     const endDateObj = mergeDateAndTime(req.body.date, req.body.end);
     const emailStart = formatTime(startDateObj);
@@ -574,35 +590,22 @@ app.post("/gmeet", async (req, res) => {
     console.log("Node Server Time:", new Date().toString());
 
     // 1️⃣ Validate input
-    if (!email || !class_name || !start || !end) {
-      return res.status(400).json({ message: "Required fields missing" });
-    }
-
+   if (!email || !class_name || !start || !end || !meeting_link) {
+  return res.status(400).json({
+    message: "Required fields missing",
+  });
+}
     if (!Array.isArray(email)) {
       return res.status(400).json({ message: "Email must be an array" });
     }
 
     // 2️⃣ Send request to N8N webhook
-    const n8nResponse = await axios.post(
-      "https://obito231.app.n8n.cloud/webhook/ae9ad352-7baa-4b8b-a65b-f6d15f2b7f69",
-      {
-        email,
-        class_name,
-        start: startDateObj.toISOString(),
-        end: endDateObj.toISOString(),
-        emailStart,
-        emailEnd,
-        emailDate,
-      }
-    );
-    console.log(emailStart, emailEnd, emailDate);
+   
+  
 
     // 3️⃣ Extract meeting link and other info from N8N response
 
-    const responseData = n8nResponse.data;
-    console.log("Emails:", email);
-    console.log("N8N Full Response:", n8nResponse);
-    console.log("N8N Response Data:", responseData);
+   
     const emailArray = email;
 
     await pool.query(
@@ -612,19 +615,93 @@ app.post("/gmeet", async (req, res) => {
         class_name,
         startDateObj,
         endDateObj,
-        responseData.meetingLink,
+        meeting_link,
         emailStart,
         emailEnd,
         emailDate,
       ]
     );
+    await transporter.sendMail({
+  from: process.env.EMAIL_USER,
+  bcc: email,
+  subject: `Class Scheduled - ${class_name}`,
+ html: `
+<div style="font-family:Arial,sans-serif;background:#f4f6f9;padding:30px;">
+  <div style="
+    max-width:600px;
+    margin:auto;
+    background:white;
+    border-radius:10px;
+    padding:30px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+  ">
+
+    <h1 style="color:#2563eb;text-align:center;">
+      Class Invitation
+    </h1>
+
+    <p>Hello Student,</p>
+
+    <p>You have been invited to attend the following class:</p>
+
+    <table style="width:100%;border-collapse:collapse;">
+      <tr>
+        <td><strong>Class</strong></td>
+        <td>${class_name}</td>
+      </tr>
+
+      <tr>
+        <td><strong>Date</strong></td>
+        <td>${emailDate}</td>
+      </tr>
+
+      <tr>
+        <td><strong>Time</strong></td>
+        <td>${emailStart} - ${emailEnd}</td>
+      </tr>
+    </table>
+
+    <div style="text-align:center;margin-top:30px;">
+      <a href="${meeting_link}"
+         style="
+           background:#2563eb;
+           color:white;
+           text-decoration:none;
+           padding:14px 28px;
+           border-radius:8px;
+           display:inline-block;
+           font-weight:bold;
+         ">
+        Join Class
+      </a>
+    </div>
+
+    <p style="margin-top:25px;">
+      If the button doesn't work:
+    </p>
+
+    <p>
+      <a href="${meeting_link}">
+        ${meeting_link}
+      </a>
+    </p>
+
+    <hr>
+
+    <p style="font-size:12px;color:#666;">
+      Physics Academy • Automated Notification
+    </p>
+
+  </div>
+</div>
+`,
+});
     console.log("Event details saved to database");
 
     return res.status(200).json({
-      message: "Event sent to N8N successfully",
-      meetingLink: responseData.meetingLink || null, // Google Meet link   // Calendar event link
-      n8nResponse: responseData, // Full N8N response if needed
-    });
+  message: "Class scheduled successfully",
+  meetingLink: meeting_link,
+});
   } catch (error) {
     console.error("Axios Error:", error.response?.data || error.message);
     return res.status(500).json({

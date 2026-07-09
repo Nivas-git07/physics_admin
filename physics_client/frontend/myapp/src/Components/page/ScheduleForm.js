@@ -14,12 +14,13 @@ export default function ScheduleForm() {
 
   const [subject, setSubject] = useState("");
   const [topic, setTopic] = useState("");
+  const [meetingLink, setMeetingLink] = useState("");
   const [date, setDate] = useState(""); 
   const [startTime, setStartTime] = useState(""); 
   const [endTime, setEndTime] = useState(""); 
 
   const [scheduleCreated, setScheduleCreated] = useState(false);
-  const [meetingLink, setMeetingLink] = useState("");
+  
 
   useEffect(() => {
     fetch("http://localhost:5000/schedule")
@@ -112,7 +113,15 @@ const deselectAll = () => setSelectedEmails([]);
   };
 
   const createSchedule = async () => {
-    if (!subject || !topic || !date || !startTime || !endTime || selectedEmails.length === 0) {
+    if (
+  !subject ||
+  !topic ||
+  !date ||
+  !startTime ||
+  !endTime ||
+  !meetingLink ||
+  selectedEmails.length === 0
+){
       alert("Fill all fields and select participants");
       return;
     }
@@ -121,13 +130,14 @@ const deselectAll = () => setSelectedEmails([]);
     setScheduleCreated(false);
     setMeetingLink("");
 
-    const payload = {
-      email: selectedEmails,
-      class_name: subject,
-      date: formatDateForBackend(date),
-      start: formatTimeForBackend(startTime),
-      end: formatTimeForBackend(endTime),
-    };
+   const payload = {
+  email: selectedEmails,
+  class_name: subject,
+  date: formatDateForBackend(date),
+  start: formatTimeForBackend(startTime),
+  end: formatTimeForBackend(endTime),
+  meeting_link: meetingLink,
+};
 
     try {
       const res = await fetch("http://localhost:5000/gmeet", {
@@ -302,6 +312,20 @@ const deselectAll = () => setSelectedEmails([]);
             <div className="schedule-card active">
               <h1>Confirm Details</h1>
               <div className="schedule-card-body schedule-card-confirm">
+                <div style={{ marginBottom: "15px" }}>
+  <label>Meeting Link</label>
+  <input
+    type="url"
+    placeholder="Paste Google Meet / Zoom Link"
+    value={meetingLink}
+    onChange={(e) => setMeetingLink(e.target.value)}
+    style={{
+      width: "100%",
+      padding: "10px",
+      marginTop: "5px"
+    }}
+  />
+</div>
                 <div className="summary">
                   <h3>{subject}</h3>
                   <p><strong>Topic:</strong> {topic}</p>
