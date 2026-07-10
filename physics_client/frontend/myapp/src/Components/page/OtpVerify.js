@@ -71,7 +71,7 @@ console.log(enteredOtp,email);
         body: JSON.stringify({ checkotp: enteredOtp, email }),
       });
 
-      const data = await response.json();
+       await response.json();
       if (response.status ===200) {
        navigate("/"); 
       }

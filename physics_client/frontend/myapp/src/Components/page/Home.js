@@ -26,12 +26,7 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   // 🔍 Check form status on first load
-  useEffect(() => {
-    const submitted = localStorage.getItem("formSubmitted");
-    if (submitted === "true") {
-      setFormSubmitted(true);
-    }
-  }, []);
+ 
   useEffect(() => {
   const revealElements = document.querySelectorAll(".scroll-reveal");
 
@@ -55,18 +50,18 @@ const HomePage = () => {
 }, []);
 
   // 🔥 Join Button Logic
-  const handleJoin = () => {
-    const loggedIn = localStorage.getItem("token");
+  // const handleJoin = () => {
+  //   const loggedIn = localStorage.getItem("token");
 
-    if (loggedIn) {
-      // Already logged in → go directly to form
-      navigate("/form");
-    } else {
-      // Not logged in → store redirect path → go to login
-      localStorage.setItem("redirectAfterLogin", "/form");
-      navigate("/");
-    }
-  };
+  //   if (loggedIn) {
+  //     // Already logged in → go directly to form
+  //     navigate("/form");
+  //   } else {
+  //     // Not logged in → store redirect path → go to login
+  //     localStorage.setItem("redirectAfterLogin", "/form");
+  //     navigate("/");
+  //   }
+  // };
 
  const testimonials = [
   {

@@ -7,7 +7,7 @@ import { useLocation } from "react-router-dom";
 export default function ConfirmPassword() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const  [error,seterror] = useState({});
+  const [, setError] = useState("");
     const navigate = useNavigate();
     const location = useLocation();
   const queryparams = new URLSearchParams(location.search);

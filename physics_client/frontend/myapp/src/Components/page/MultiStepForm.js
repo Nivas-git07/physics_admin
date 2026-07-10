@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "../css/MultiStepForm.css";
-import { Link } from "react-router-dom";
 import Navbar from "./Navbar";
 
 // Step 1: Student Details
