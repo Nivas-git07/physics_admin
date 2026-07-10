@@ -426,3 +426,472 @@
     padding: 16px !important;
   }
 }
+
+/* Shared admin polish */
+.submissions-container {
+  background: linear-gradient(180deg, #f4fffd 0%, #ffffff 100%);
+}
+
+
+
+.title,
+.card-name,
+.detail-modal h2 {
+  color: #102027;
+}
+
+.avatar-large,
+.view-btn,
+.danger {
+  background: linear-gradient(135deg, #00a896, #057d74) !important;
+}
+/* ===================================================== */
+/* PREMIUM FORM SUBMISSIONS UI UPGRADE                  */
+/* Paste at the bottom of FormSubmissions.css            */
+/* ===================================================== */
+
+.submissions-container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 42px 22px 70px;
+  font-family: "Poppins", sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(0, 191, 166, 0.12), transparent 34%),
+    linear-gradient(180deg, #f4fffd 0%, #ffffff 100%);
+  min-height: 100vh;
+}
+
+.title {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: #102027;
+  margin-bottom: 8px;
+}
+
+.title::after {
+  content: "";
+  width: 90px;
+  height: 5px;
+  display: block;
+  margin: 16px auto 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #00bfa5, #057d74);
+}
+
+.subtitle {
+  color: #60717a;
+  font-size: 1.05rem;
+  margin-bottom: 34px;
+}
+
+.subtitle strong {
+  color: #00a896;
+}
+
+/* TABLE WRAPPER */
+.table-container {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(0, 168, 150, 0.14);
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 24px 70px rgba(0, 168, 150, 0.12);
+}
+
+/* DESKTOP TABLE */
+.submissions-table th {
+  background: linear-gradient(135deg, #00bfa5, #057d74);
+  color: white;
+  padding: 22px 24px;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.submissions-table td {
+  padding: 22px 24px;
+  border-bottom: 1px solid rgba(0, 168, 150, 0.09);
+  color: #334155;
+}
+
+.submissions-table tbody tr {
+  transition: 0.25s ease;
+}
+
+.submissions-table tbody tr:hover {
+  background: #f0fffc;
+}
+
+.name-btn {
+  background: transparent;
+  border: none;
+  color: #102027;
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+}
+
+.name-btn::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 0;
+  height: 2px;
+  background: #00a896;
+  transition: 0.25s ease;
+}
+
+.name-btn:hover {
+  color: #00a896;
+}
+
+.name-btn:hover::after {
+  width: 100%;
+}
+
+.course {
+  font-weight: 700;
+  color: #057d74;
+}
+
+.date {
+  color: #64748b;
+}
+
+.delete-small-btn {
+  background: #fff1f2;
+  color: #e11d48;
+  border: 1px solid #fecdd3;
+  padding: 10px 18px;
+  border-radius: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.delete-small-btn:hover {
+  background: #e11d48;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(225, 29, 72, 0.2);
+}
+
+/* EMPTY STATE */
+.no-data {
+  padding: 70px 20px;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+/* DETAIL MODAL */
+.modal-overlay {
+  background: rgba(8, 18, 24, 0.72);
+  backdrop-filter: blur(14px);
+}
+
+.detail-modal {
+  border-radius: 30px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 168, 150, 0.15);
+  box-shadow: 0 35px 90px rgba(0, 0, 0, 0.35);
+}
+
+.modal-header {
+  background:
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.22), transparent 30%),
+    linear-gradient(135deg, #00bfa5, #057d74);
+}
+
+.avatar-large {
+  background: rgba(255, 255, 255, 0.18);
+  border: 4px solid rgba(255, 255, 255, 0.9);
+}
+
+.close-btn {
+  border-radius: 14px;
+  font-size: 28px;
+  transition: 0.25s ease;
+}
+
+.modal-grid {
+  background: #f6fffd;
+}
+
+.info-tag {
+  border-radius: 20px;
+  border: 1px solid rgba(0, 168, 150, 0.12);
+  box-shadow: 0 12px 30px rgba(0, 168, 150, 0.08);
+}
+
+.info-tag strong {
+  color: #057d74;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 0.78rem;
+}
+
+.info-tag span {
+  color: #102027;
+  font-size: 1rem;
+}
+
+/* DELETE CONFIRM MODAL */
+.confirm-modal {
+  width: min(92vw, 430px);
+  border-radius: 28px;
+  border: 1px solid rgba(225, 29, 72, 0.12);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.28);
+}
+
+.confirm-modal h3 {
+  color: #102027;
+  font-size: 1.55rem;
+  font-weight: 800;
+}
+
+.confirm-modal h3::before {
+  content: "⚠️";
+  display: block;
+  font-size: 2.4rem;
+  margin-bottom: 12px;
+}
+
+.confirm-modal p {
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.btn-group button {
+  border-radius: 14px;
+  transition: 0.25s ease;
+}
+
+.btn-group button:first-child {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.btn-group button:first-child:hover {
+  background: #e2e8f0;
+}
+
+.btn-group .danger {
+  background: linear-gradient(135deg, #fb7185, #e11d48);
+  color: white;
+}
+
+.btn-group .danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(225, 29, 72, 0.25);
+}
+
+/* LOADING */
+.loading {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  color: #00a896;
+  font-weight: 800;
+  background: #f4fffd;
+}
+
+/* MOBILE PREMIUM CARDS */
+@media (max-width: 768px) {
+  .submissions-container {
+    padding: 32px 14px 54px;
+  }
+
+  .title {
+    font-size: 2rem !important;
+    line-height: 1.2;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 24px;
+  }
+
+  .table-container {
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+  }
+
+  .submissions-table {
+    display: none !important;
+  }
+
+  .submissions-cards {
+    display: grid;
+    gap: 18px;
+    padding: 0;
+  }
+
+  .submission-card {
+    background:
+      linear-gradient(180deg, #ffffff 0%, #f7fffd 100%);
+    border: 1px solid rgba(0, 168, 150, 0.14);
+    border-radius: 24px;
+    padding: 20px;
+    box-shadow: 0 16px 40px rgba(0, 168, 150, 0.12);
+    border-left: none;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .submission-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 5px;
+    background: linear-gradient(180deg, #00bfa5, #057d74);
+  }
+
+  .card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .card-name {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #102027;
+    padding-left: 4px;
+  }
+
+  .card-course {
+    width: fit-content;
+    background: #dcfdf7;
+    color: #057d74;
+    padding: 7px 13px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 800;
+  }
+
+  .card-date {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin: 12px 0 16px;
+  }
+
+  .card-date::before {
+    content: "Submitted: ";
+    font-weight: 700;
+    color: #334155;
+  }
+
+  .card-actions {
+    display: grid;
+    grid-template-columns: 1fr 0.75fr;
+    gap: 10px;
+  }
+
+  .view-btn,
+  .delete-card-btn {
+    border-radius: 14px;
+    padding: 13px 12px;
+    font-size: 0.9rem;
+    font-weight: 800;
+  }
+
+  .view-btn {
+    background: linear-gradient(135deg, #00bfa5, #057d74);
+    box-shadow: 0 12px 24px rgba(0, 168, 150, 0.2);
+  }
+
+  .delete-card-btn {
+    background: #fff1f2;
+    color: #e11d48;
+    border: 1px solid #fecdd3;
+  }
+
+  .delete-card-btn:hover {
+    background: #e11d48;
+    color: white;
+  }
+
+  /* MOBILE DETAIL MODAL */
+  .modal-overlay {
+    padding: 14px;
+    align-items: flex-end;
+  }
+
+  .detail-modal {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 88vh;
+    border-radius: 28px 28px 0 0;
+  }
+
+  .modal-header {
+    padding: 28px 20px !important;
+    flex-direction: column;
+    text-align: center;
+    gap: 14px;
+  }
+
+  .avatar-large {
+    width: 82px !important;
+    height: 82px !important;
+    font-size: 34px;
+  }
+
+  .modal-header h2 {
+    font-size: 1.45rem !important;
+  }
+
+  .course-large {
+    font-size: 0.95rem;
+  }
+
+  .close-btn {
+    top: 14px;
+    right: 14px;
+    width: 38px;
+    height: 38px;
+    font-size: 24px;
+  }
+
+  .modal-grid {
+    padding: 20px !important;
+    grid-template-columns: 1fr !important;
+    gap: 13px;
+  }
+
+  .info-tag {
+    padding: 15px 18px 15px 22px;
+    border-radius: 16px;
+  }
+
+  .info-tag:hover {
+    transform: none;
+  }
+
+  .modal-footer {
+    font-size: 0.85rem;
+    padding: 18px;
+  }
+
+  .confirm-modal {
+    width: 100%;
+    border-radius: 24px;
+    padding: 30px 22px !important;
+  }
+
+  .btn-group {
+    flex-direction: column;
+  }
+
+  .btn-group button {
+    width: 100%;
+    padding: 15px !important;
+  }
+}

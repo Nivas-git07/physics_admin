@@ -165,3 +165,74 @@ a, button, .nav-link {
 @media (max-width: 480px) {
   .logo { font-size: 28px; }
 }
+
+.headers {
+  border-bottom: 1px solid rgba(0, 150, 135, 0.12);
+}
+
+.logo {
+  letter-spacing: 0;
+}
+
+.logo::after {
+  content: " Physics";
+  color: #102027;
+  font-weight: 600;
+}
+
+.nav-links {
+  display: flex;
+}
+
+.desktop-only .nav-link:hover,
+.desktop-only .nav-link.active {
+  color: #009687 !important;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.email {
+  max-width: 230px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logout-btn,
+.mobile-logout-btn {
+  border: 0;
+  background: #ffffff;
+  color: #00796d;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(0, 150, 135, 0.12);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.logout-btn {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logout-btn:hover,
+.mobile-logout-btn:hover {
+  background: #dffbf6;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(0, 150, 135, 0.18);
+}
+
+.mobile-logout-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: 700;
+}

@@ -11,6 +11,8 @@ export default function ScheduleForm() {
   const [loading, setLoading] = useState(true);
   const [loadingSchedule, setLoadingSchedule] = useState(false);
   const [showPeoplePopup, setShowPeoplePopup] = useState(false);
+  const [errors, setErrors] = useState({});
+const [successData, setSuccessData] = useState(null);
 
   const [subject, setSubject] = useState("");
   const [topic, setTopic] = useState("");
@@ -23,7 +25,10 @@ export default function ScheduleForm() {
   
 
   useEffect(() => {
-    fetch("http://localhost:5000/schedule")
+    const token = localStorage.getItem("token");
+    fetch("http://localhost:5000/schedule", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
       .then((res) => res.json())
       .then((data) => {
         if (data && Array.isArray(data.users)) {
@@ -64,37 +69,94 @@ const selectAll = () => {
   setSelectedEmails(filtered.map((p) => p.email));
 };
 const deselectAll = () => setSelectedEmails([]);
+const today = new Date().toISOString().split("T")[0];
+
+const timeSlots = [
+  "06:00", "06:30", "07:00", "07:30",
+  "17:00", "17:30", "18:00", "18:30",
+  "19:00", "19:30", "20:00", "20:30",
+];
+
+const getAutoEndTime = (start) => {
+  if (!start) return "";
+  const [h, m] = start.split(":").map(Number);
+  const startDate = new Date();
+  startDate.setHours(h, m, 0, 0);
+  startDate.setMinutes(startDate.getMinutes() + 60);
+
+  return `${String(startDate.getHours()).padStart(2, "0")}:${String(
+    startDate.getMinutes()
+  ).padStart(2, "0")}`;
+};
+
+const validateStepOne = () => {
+  const newErrors = {};
+
+  if (!subject.trim()) newErrors.subject = "Subject is required";
+  if (!topic.trim()) newErrors.topic = "Topic is required";
+  if (!date) newErrors.date = "Date is required";
+  if (!startTime) newErrors.startTime = "Start time is required";
+  if (!endTime) newErrors.endTime = "End time is required";
+
+  if (date && date < today) {
+    newErrors.date = "Past date is not allowed";
+  }
+
+  if (startTime && endTime && endTime <= startTime) {
+    newErrors.endTime = "End time must be after start time";
+  }
+
+  setErrors(newErrors);
+  return Object.keys(newErrors).length === 0;
+};
+
+const validateConfirmStep = () => {
+  const newErrors = {};
+
+  if (!meetingLink.trim()) {
+    newErrors.meetingLink = "Meeting link is required";
+  } else if (!/^https?:\/\/.+/i.test(meetingLink)) {
+    newErrors.meetingLink = "Enter a valid meeting link";
+  }
+
+  if (selectedEmails.length === 0) {
+    newErrors.participants = "Select at least one participant";
+  }
+
+  setErrors(newErrors);
+  return Object.keys(newErrors).length === 0;
+};
 
 
-  const next = () => {
-    if (step === 1 && (!subject || !topic || !date || !startTime || !endTime)) {
-      alert("Fill all fields");
-      return;
-    }
-    if (step === 1) {
-      setShowPeoplePopup(true);
-      return;
-    }
-    setStep(step + 1);
-  };
+const next = () => {
+  if (step === 1) {
+    if (!validateStepOne()) return;
+    setShowPeoplePopup(true);
+    return;
+  }
+
+  setStep((prev) => prev + 1);
+};
 
   const closePopup = () => {
     setShowPeoplePopup(false);
     setSearch("");
   };
 
-  const proceedFromPopup = () => {
-    if (selectedEmails.length === 0) {
-      alert("Select at least one person");
-      return;
-    }
-    closePopup();
-    setStep(2);
+ const proceedFromPopup = () => {
+  if (selectedEmails.length === 0) {
+    setErrors({ participants: "Select at least one person" });
+    return;
+  }
 
-    setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 100);
-  };
+  setErrors({});
+  closePopup();
+  setStep(2);
+
+  setTimeout(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, 100);
+};
 
   const back = () => setStep(step - 1);
 
@@ -112,54 +174,59 @@ const deselectAll = () => setSelectedEmails([]);
     return `${h}:${min.toString().padStart(2, "0")} ${ampm}`;
   };
 
-  const createSchedule = async () => {
-    if (
-  !subject ||
-  !topic ||
-  !date ||
-  !startTime ||
-  !endTime ||
-  !meetingLink ||
-  selectedEmails.length === 0
-){
-      alert("Fill all fields and select participants");
-      return;
-    }
+ const createSchedule = async () => {
+  if (!validateConfirmStep()) return;
 
-    setLoadingSchedule(true);
-    setScheduleCreated(false);
-    setMeetingLink("");
+  setLoadingSchedule(true);
+  setScheduleCreated(false);
 
-   const payload = {
-  email: selectedEmails,
-  class_name: subject,
-  date: formatDateForBackend(date),
-  start: formatTimeForBackend(startTime),
-  end: formatTimeForBackend(endTime),
-  meeting_link: meetingLink,
-};
-
-    try {
-      const res = await fetch("http://localhost:5000/gmeet", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await res.json();
-      setLoadingSchedule(false);
-
-      if (res.ok) {
-        setScheduleCreated(true);
-        setMeetingLink(data.meetingLink);
-      } else {
-        alert("Failed: " + data.message);
-      }
-    } catch (err) {
-      setLoadingSchedule(false);
-      alert("Something went wrong!");
-    }
+  const payload = {
+    email: selectedEmails,
+    class_name: subject,
+    topic,
+    date: formatDateForBackend(date),
+    start: formatTimeForBackend(startTime),
+    end: formatTimeForBackend(endTime),
+    meeting_link: meetingLink,
   };
+
+  try {
+    const res = await fetch("http://localhost:5000/gmeet", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json();
+    setLoadingSchedule(false);
+
+    if (res.ok) {
+      setSuccessData({
+        subject,
+        topic,
+        date,
+        startTime,
+        endTime,
+        meetingLink,
+        participants: selectedEmails.length,
+      });
+      setScheduleCreated(true);
+    } else {
+      setErrors({
+        submit: data.message || "Failed to create schedule",
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    setLoadingSchedule(false);
+    setErrors({
+      submit: "Something went wrong. Please try again.",
+    });
+  }
+};
 
   const resetForm = () => {
     setStep(1);
@@ -190,14 +257,54 @@ const deselectAll = () => setSelectedEmails([]);
                   <p>Creating Schedule...</p>
                 </>
               )}
-              {scheduleCreated && (
-                <>
-                  <div className="tick">✓</div>
-                  <p>Meeting Created!</p>
-                  <a href={meetingLink} target="_blank" rel="noopener noreferrer">{meetingLink}</a>
-                  <button className="done-btn" onClick={resetForm}>Done</button>
-                </>
-              )}
+             {scheduleCreated && successData && (
+  <>
+    <div className="success-icon">✓</div>
+    <h2 className="success-title">Schedule Created Successfully</h2>
+    <p className="success-text">
+      Meeting details have been sent to selected students.
+    </p>
+
+    <div className="success-summary">
+      <div>
+        <span>Subject</span>
+        <strong>{successData.subject}</strong>
+      </div>
+      <div>
+        <span>Topic</span>
+        <strong>{successData.topic}</strong>
+      </div>
+      <div>
+        <span>Date</span>
+        <strong>{new Date(successData.date).toLocaleDateString("en-IN")}</strong>
+      </div>
+      <div>
+        <span>Time</span>
+        <strong>
+          {formatTimeForBackend(successData.startTime)} -{" "}
+          {formatTimeForBackend(successData.endTime)}
+        </strong>
+      </div>
+      <div>
+        <span>Participants</span>
+        <strong>{successData.participants}</strong>
+      </div>
+    </div>
+
+    <a
+      className="meeting-link-btn"
+      href={successData.meetingLink}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Open Meeting Link
+    </a>
+
+    <button className="done-btn" onClick={resetForm}>
+      Create Another Schedule
+    </button>
+  </>
+)}
             </div>
           </div>
         )}
@@ -286,61 +393,172 @@ const deselectAll = () => setSelectedEmails([]);
             <div className="schedule-card active">
               <h1>Calendar & Subject Detail</h1>
               <div className="schedule-card-body">
-                <input placeholder="Subject" value={subject} onChange={e => setSubject(e.target.value)} />
-                <input placeholder="Topic" value={topic} onChange={e => setTopic(e.target.value)} />
-                <input type="date" value={date} onChange={e => setDate(e.target.value)} />
+  <div className="field-group">
+    <label>Subject</label>
+    <input
+      placeholder="Example: Physics"
+      value={subject}
+      onChange={(e) => {
+        setSubject(e.target.value);
+        setErrors((prev) => ({ ...prev, subject: "" }));
+      }}
+    />
+    {errors.subject && <p className="field-error">{errors.subject}</p>}
+  </div>
 
-                <div className="time-row">
-                  <div className="time-box">
-                    <label>Start Time</label>
-                    <input type="time" value={startTime} onChange={e => setStartTime(e.target.value)} />
-                  </div>
-                  <div className="time-box">
-                    <label>End Time</label>
-                    <input type="time" value={endTime} onChange={e => setEndTime(e.target.value)} />
-                  </div>
-                </div>
+  <div className="field-group">
+    <label>Topic</label>
+    <input
+      placeholder="Example: Laws of Motion"
+      value={topic}
+      onChange={(e) => {
+        setTopic(e.target.value);
+        setErrors((prev) => ({ ...prev, topic: "" }));
+      }}
+    />
+    {errors.topic && <p className="field-error">{errors.topic}</p>}
+  </div>
 
-                <div className="btn-row" style={{ justifyContent: "center" }}>
-                  <button className="next-btn large-btn" onClick={next}>Next →</button>
-                </div>
-              </div>
+  <div className="field-group">
+    <label>Class Date</label>
+    <input
+      type="date"
+      min={today}
+      value={date}
+      onChange={(e) => {
+        setDate(e.target.value);
+        setErrors((prev) => ({ ...prev, date: "" }));
+      }}
+    />
+    {errors.date && <p className="field-error">{errors.date}</p>}
+  </div>
+
+  <div className="time-selection-box">
+    <label className="main-label">Choose Class Time</label>
+
+    <div className="quick-time-grid">
+      {timeSlots.map((slot) => (
+        <button
+          type="button"
+          key={slot}
+          className={`time-chip ${startTime === slot ? "active" : ""}`}
+          onClick={() => {
+            setStartTime(slot);
+            setEndTime(getAutoEndTime(slot));
+            setErrors((prev) => ({
+              ...prev,
+              startTime: "",
+              endTime: "",
+            }));
+          }}
+        >
+          {formatTimeForBackend(slot)}
+        </button>
+      ))}
+    </div>
+
+    <div className="time-row improved-time-row">
+      <div className="time-box">
+        <label>Start Time</label>
+        <input
+          type="time"
+          value={startTime}
+          onChange={(e) => {
+            const value = e.target.value;
+            setStartTime(value);
+            setEndTime(getAutoEndTime(value));
+            setErrors((prev) => ({ ...prev, startTime: "", endTime: "" }));
+          }}
+        />
+        {errors.startTime && <p className="field-error">{errors.startTime}</p>}
+      </div>
+
+      <div className="time-box">
+        <label>End Time</label>
+        <input
+          type="time"
+          value={endTime}
+          onChange={(e) => {
+            setEndTime(e.target.value);
+            setErrors((prev) => ({ ...prev, endTime: "" }));
+          }}
+        />
+        {errors.endTime && <p className="field-error">{errors.endTime}</p>}
+      </div>
+    </div>
+  </div>
+
+  <div className="btn-row" style={{ justifyContent: "center" }}>
+    <button className="next-btn large-btn" onClick={next}>
+      Next →
+    </button>
+  </div>
+</div>
             </div>
           )}
 
           {step === 2 && (
             <div className="schedule-card active">
               <h1>Confirm Details</h1>
-              <div className="schedule-card-body schedule-card-confirm">
-                <div style={{ marginBottom: "15px" }}>
-  <label>Meeting Link</label>
-  <input
-    type="url"
-    placeholder="Paste Google Meet / Zoom Link"
-    value={meetingLink}
-    onChange={(e) => setMeetingLink(e.target.value)}
-    style={{
-      width: "100%",
-      padding: "10px",
-      marginTop: "5px"
-    }}
-  />
-</div>
-                <div className="summary">
-                  <h3>{subject}</h3>
-                  <p><strong>Topic:</strong> {topic}</p>
-                  <p><strong>Date:</strong> {date}</p>
-                  <p className="time-display">
-                    <strong>Time:</strong> {formatTimeForBackend(startTime)} - {formatTimeForBackend(endTime)}
-                  </p>
-                  <p><strong>Participants:</strong> {selectedEmails.length}</p>
-                </div>
+             <div className="schedule-card-body schedule-card-confirm">
+  <div className="field-group">
+    <label>Meeting Link</label>
+    <input
+      type="url"
+      placeholder="Paste Google Meet / Zoom Link"
+      value={meetingLink}
+      onChange={(e) => {
+        setMeetingLink(e.target.value);
+        setErrors((prev) => ({ ...prev, meetingLink: "" }));
+      }}
+    />
+    {errors.meetingLink && <p className="field-error">{errors.meetingLink}</p>}
+  </div>
 
-                <div className="btn-row" style={{ justifyContent: "center", flexDirection: "column", gap: "10px" }}>
-                  <button className="back-btn large-btn" onClick={back}>← Back</button>
-                  <button className="create-btn large-btn" onClick={createSchedule}>Create Schedule</button>
-                </div>
-              </div>
+  <div className="confirm-box">
+    <div className="confirm-header">
+      <span>Confirm Schedule</span>
+      <h3>{subject}</h3>
+      <p>{topic}</p>
+    </div>
+
+    <div className="confirm-grid">
+      <div className="confirm-item">
+        <span>Date</span>
+        <strong>{new Date(date).toLocaleDateString("en-IN")}</strong>
+      </div>
+
+      <div className="confirm-item">
+        <span>Time</span>
+        <strong>
+          {formatTimeForBackend(startTime)} - {formatTimeForBackend(endTime)}
+        </strong>
+      </div>
+
+      <div className="confirm-item">
+        <span>Participants</span>
+        <strong>{selectedEmails.length} Students</strong>
+      </div>
+
+      <div className="confirm-item">
+        <span>Mode</span>
+        <strong>Online Class</strong>
+      </div>
+    </div>
+  </div>
+
+  {errors.participants && <p className="field-error center-error">{errors.participants}</p>}
+  {errors.submit && <p className="field-error center-error">{errors.submit}</p>}
+
+  <div className="btn-row confirm-actions">
+    <button className="back-btn large-btn" onClick={back}>
+      ← Back
+    </button>
+    <button className="create-btn large-btn" onClick={createSchedule}>
+      Create Schedule
+    </button>
+  </div>
+</div>
             </div>
           )}
         </div>

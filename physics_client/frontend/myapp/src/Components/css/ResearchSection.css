@@ -288,6 +288,10 @@
   display: inline-flex;
   align-items: center;
   text-decoration: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
 }
 
 .arrow {

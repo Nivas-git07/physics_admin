@@ -3,9 +3,6 @@ import "../css/Home.css";
 import "../css/FooterSection.css"
 import profileImg from "../../assets/phymam.jpg"; // replace with your actual image
 import ResearchSection from "./ResearchSection";
-import FooterSection from "./FooterSection";
-import { Link } from "react-router-dom";
-import { IconsManifest } from "react-icons/lib";
 import user1 from "../../assets/student1.jpg";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -13,8 +10,6 @@ import Footer from "../../pagecomponent/footer/footer";
 
 import {
   FaEnvelope,
-  FaMapMarkerAlt,
-  FaPhoneAlt,
   FaQuoteLeft,
   FaQuoteRight,
   FaClock,
@@ -29,12 +24,32 @@ const HomePage = () => {
 
   // 🔍 Check form status on first load
   useEffect(() => {
-    localStorage.removeItem("formSubmitted");
     const submitted = localStorage.getItem("formSubmitted");
     if (submitted === "true") {
       setFormSubmitted(true);
     }
   }, []);
+  useEffect(() => {
+  const revealElements = document.querySelectorAll(".scroll-reveal");
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("show");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.15,
+    }
+  );
+
+  revealElements.forEach((el) => observer.observe(el));
+
+  return () => observer.disconnect();
+}, []);
 
   // 🔥 Join Button Logic
   const handleJoin = () => {
@@ -46,7 +61,7 @@ const HomePage = () => {
     } else {
       // Not logged in → store redirect path → go to login
       localStorage.setItem("redirectAfterLogin", "/form");
-      navigate("/login");
+      navigate("/");
     }
   };
 
@@ -74,9 +89,13 @@ const HomePage = () => {
 
       <main>
         <section id="home" className="hero-section">
+          <div className="physics-orbit orbit-one"></div>
+          <div className="physics-orbit orbit-two"></div>
+          <div className="wave-line"></div>
           <div className="hero-container">
             <div className="hero-content">
               <div className="left">
+                <span className="hero-kicker">Physics tuition centre</span>
                 <h1 className="hero-title">Growing</h1>
                 <div className="hero-subtitle">
                   Seed to Tree in <span className="physics-text">Physics</span>
@@ -86,7 +105,12 @@ const HomePage = () => {
                   advanced discoveries.
                 </p>
 
-                
+                <div className="hero-actions">
+                  <button className="cta-button" onClick={() => navigate("/schedule")}>
+                    Schedule Class
+                  </button>
+                 
+                </div>
               </div>
 
               <div className="hero-visual">
@@ -127,27 +151,27 @@ const HomePage = () => {
         </section> */}
         <section className="about-section">
           {/* LEFT */}
-          <div class="about-left">
-            <h1 class="title">
+          <div className="about-left">
+            <h1 className="title">
               I'm
-              {/* <span class="box f-box">   F</span>
+              {/* <span className="box f-box">   F</span>
               <span>athi</span>
-              <span class="box m-box">m</span>
-              <span class="box a-box">a</span> */}
-              <span class="char bg-light">F</span>
-              <span class="char teal">a</span>
-              <span class="char teal">t</span>
-              <span class="char teal">h</span>
-              <span class="char teal">i</span>
+              <span className="box m-box">m</span>
+              <span className="box a-box">a</span> */}
+              <span className="char bg-light">F</span>
+              <span className="char teal">a</span>
+              <span className="char teal">t</span>
+              <span className="char teal">h</span>
+              <span className="char teal">i</span>
 
-              <span class="char bg-dark">m</span>
-              <span class="char bg-dark">a</span>
+              <span className="char bg-dark">m</span>
+              <span className="char bg-dark">a</span>
             </h1>
 
-            <div class="prof-box">
+            <div className="prof-box">
               <p>Professor</p>
-              <p class="indent-1">in</p>
-              <p class="indent-2">Physics</p>
+              <p className="indent-1">in</p>
+              <p className="indent-2">Physics</p>
             </div>
           </div>
 
@@ -193,7 +217,9 @@ const HomePage = () => {
         </section>
       </main>
 
-      <ResearchSection />
+    <div className="scroll-reveal">
+  <ResearchSection />
+</div>
 
       {/* Footer */}
       <div id="footer" className="footer-wrapper">
@@ -260,7 +286,11 @@ const HomePage = () => {
 
           <div className="testimonial-grid">
             {testimonials.map((t, i) => (
-              <div className="testimonial-card" key={i}>
+              <div
+  className="testimonial-card scroll-reveal"
+  key={i}
+  style={{ transitionDelay: `${i * 120}ms` }}
+>
                 <div className="profile-header">
                   <img src={user1} alt={t.name} className="profile-img" />
                   <div className="profile-info">

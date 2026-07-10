@@ -1,8 +1,8 @@
 // src/components/Navbar.jsx
 import React, { useState, useEffect } from "react";
 import "../css/Navbar.css";
-import { Link, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";  // npm install lucide-react
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { LogOut, Menu, X } from "lucide-react";
 
 export default function Navbar() {
   const [email, setEmail] = useState(null);
@@ -11,6 +11,7 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -21,6 +22,7 @@ export default function Navbar() {
           setLoading(false);
           return;
         }
+        setEmail(localStorage.getItem("adminEmail"));
         const res = await fetch("http://localhost:5000/home", {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -48,6 +50,11 @@ export default function Navbar() {
   }, [location]);
 
   const isActive = (path) => location.pathname === path;
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("adminEmail");
+    navigate("/");
+  };
 
   return (
     <header className={`headers ${scrolled ? "scrolled" : ""}`}>
@@ -66,8 +73,11 @@ export default function Navbar() {
         </ul>
 
         {/* Desktop Email */}
-        <div className="email desktop-only">
-          {loading ? "Loading..." : email || "Guest"}
+        <div className="nav-actions desktop-only">
+          <div className="email">{loading ? "Loading..." : email || "Guest"}</div>
+          <button className="logout-btn" onClick={handleLogout} title="Logout">
+            <LogOut size={18} />
+          </button>
         </div>
 
         {/* Mobile Hamburger */}
@@ -87,6 +97,11 @@ export default function Navbar() {
             <li><Link to="/users" className={`nav-link ${isActive("/users") ? "active" : ""}`}>User</Link></li>
             <li><Link to="/detail" className={`nav-link ${isActive("/detail") ? "active" : ""}`}>FormDetail</Link></li>
             <li className="mobile-email">{loading ? "Loading..." : email || "Guest"}</li>
+            <li>
+              <button className="mobile-logout-btn" onClick={handleLogout}>
+                <LogOut size={18} /> Logout
+              </button>
+            </li>
           </ul>
         </div>
       </nav>

@@ -1,21 +1,21 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import SignupForm from "./Components/page/SignupForm";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import LoginForm from "./Components/page/Login";
 import OtpVerify  from "./Components/page/OtpVerify";
 import HomePage from "./Components/page/Home";
-import FooterSection from "./Components/page/FooterSection";
 import ForgotPassword from "./Components/page/forgetpassword";
 import MultiStepForm from "./Components/page/MultiStepForm";
 import ConfirmPassword from "./Components/page/confirmpassword";
 import AuthCallback from "./Components/logincomponents/googleauth";
 import Githubcallback from "./Components/logincomponents/github";
-import Event from "./Components/page/Event";
 import ScheduleForm from "./Components/page/ScheduleForm";
 import UserList from "./Components/page/UserList";
 import FormSubmissions from "./Components/page/FormSubmissions";
 
 
+function AdminRoute({ children }) {
+  return localStorage.getItem("token") ? children : <Navigate to="/" replace />;
+}
 
 function App() {
   return (
@@ -23,15 +23,17 @@ function App() {
       <Routes>
   
         <Route path="/" element={<LoginForm/>}/>
+        <Route path="/login" element={<LoginForm/>}/>
         <Route path="/Otp-verify" element={<OtpVerify/>}/>
-        <Route path="/home" element={<HomePage/>}/>
+        <Route path="/home" element={<AdminRoute><HomePage/></AdminRoute>}/>
         <Route path="/forget_password" element={<ForgotPassword/>}/>
         <Route path="/confirm_password" element={<ConfirmPassword/>}/>
         <Route path="/auth/callback" element={<AuthCallback/>}/>
         <Route path="/auth/github/callback" element={<Githubcallback />} />
-        <Route path="/schedule" element={<ScheduleForm/>}/>
-        <Route path="/users" element={<UserList/>}/>
-        <Route path="/detail" element={<FormSubmissions/>}/>
+        <Route path="/schedule" element={<AdminRoute><ScheduleForm/></AdminRoute>}/>
+        <Route path="/users" element={<AdminRoute><UserList/></AdminRoute>}/>
+        <Route path="/detail" element={<AdminRoute><FormSubmissions/></AdminRoute>}/>
+        <Route path="/form" element={<AdminRoute><MultiStepForm/></AdminRoute>}/>
 
       </Routes>
     </Router>

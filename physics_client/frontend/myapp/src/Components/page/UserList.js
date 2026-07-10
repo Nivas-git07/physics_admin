@@ -15,7 +15,9 @@ export default function UserList() {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch("http://localhost:5000/admin/users");
+      const res = await fetch("http://localhost:5000/admin/users", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
       const data = await res.json();
       if (data.success) setUsers(data.users);
     } catch (err) {
@@ -32,7 +34,10 @@ export default function UserList() {
     try {
       const res = await fetch(
         `http://localhost:5000/admin/delete-user/${deleteModal.email}`,
-        { method: "DELETE" }
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
       );
 
       const result = await res.json();

@@ -1,22 +1,19 @@
 import React, { useState } from "react";
 import "../css/Login.css";
 import { Link, useNavigate } from "react-router-dom";
-import Auth from "../logincomponents/auth";
 
-export default function LoginForm({ onSubmit }) {
-  const [email, setemail] = useState("");
+export default function LoginForm() {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  const handleback = () => {
-    navigate("/home");   // Redirect to event page after login
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const newErrors = {};
-    if (!email) newErrors.email = "Email is required";
+    if (!email.trim()) newErrors.email = "Email is required";
     if (!password) newErrors.password = "Password is required";
 
     if (Object.keys(newErrors).length > 0) {
@@ -25,6 +22,7 @@ export default function LoginForm({ onSubmit }) {
     }
 
     setErrors({});
+    setLoading(true);
 
     try {
       const response = await fetch("http://localhost:5000/login", {
@@ -36,20 +34,19 @@ export default function LoginForm({ onSubmit }) {
       });
 
       const data = await response.json();
-      console.log("LOGIN RESPONSE:", data);
 
-      // ❌ YOUR MISTAKE EARLIER: token not saved
-      // ✅ FIX: Save token here
-      if (data.token) {
+      if (response.ok && data.token) {
         localStorage.setItem("token", data.token);
-        console.log("TOKEN SAVED:", data.token);
-
-        handleback(); // redirect after login
+        localStorage.setItem("adminEmail", data.email || email);
+        navigate("/home");
       } else {
-        alert("Invalid login");
+        alert(data.message || "Invalid login");
       }
     } catch (error) {
       console.error("Login Error:", error);
+      alert("Unable to reach the login server");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,61 +54,70 @@ export default function LoginForm({ onSubmit }) {
     <div className="page-container">
       <div className="login-centered">
         <div className="login-card">
-          <div className="login-left">
-            <h1>
-              Hello Fathima MS <span className="wave">👋</span>
-            </h1>
-            
+         <div className="login-left">
+  <div className="login-left">
+  <div className="login-form-card">
+    <div className="login-header">
+      <span className="login-badge">Admin Portal</span>
 
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label>Email</label>
-                <input
-                  type="email"
-                  className="signup-input"
-                  placeholder="youremail@gmail.com"
-                  value={email}
-                  onChange={(e) => setemail(e.target.value)}
-                />
-                {errors.email && <p className="error">{errors.email}</p>}
-              </div>
+      <h1>
+        Hello, <span>Ms. Fathima</span>
+        <span className="wave">👋</span>
+      </h1>
 
-              <div className="form-group">
-                <label>Password</label>
-                <input
-                  className="form-input"
-                  type="password"
-                  placeholder=". . . . . . . . "
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                {errors.password && <p className="error">{errors.password}</p>}
-              </div>
+      <p>
+        Sign in to manage classes, schedules, and student updates.
+      </p>
+    </div>
 
-              <div className="form-options">
-                <label className="checkbox-label">
-                  <input type="checkbox" /> I agree the{" "}
-                  <a href="#" className="terms-link">Terms</a> and{" "}
-                  <a href="#" className="terms-link">Privacy</a>
-                </label>
+    <form onSubmit={handleSubmit} className="login-form">
+      <div className="form-group">
+        <label>Email</label>
+        <input
+          type="email"
+          className="form-input"
+          placeholder="admin@email.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        {errors.email && <p className="error">{errors.email}</p>}
+      </div>
 
-                <Link to="/forget_password" className="forgot-link">
-                  Forgot Password?
-                </Link>
-              </div>
+      <div className="form-group">
+        <label>Password</label>
+        <input
+          className="form-input"
+          type="password"
+          placeholder="Enter admin password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        {errors.password && <p className="error">{errors.password}</p>}
+      </div>
 
-              <button type="submit" className="btn">
-                Sign In
-              </button>
+      <div className="form-options">
+        <label className="checkbox-label">
+          <input type="checkbox" />
+          <span>
+            I agree the <span className="terms-link">Terms</span> and{" "}
+            <span className="terms-link">Privacy</span>
+          </span>
+        </label>
 
-              <Auth />
-            </form>
-          </div>
+        
+      </div>
 
+      <button type="submit" className="btn" disabled={loading}>
+        {loading ? "Signing In..." : "Sign In"}
+      </button>
+    </form>
+  </div>
+</div>
+</div>
           <div className="login-right">
             <img
               src="https://c.animaapp.com/mhc7qo5ywWFP2V/img/vector.png"
-              alt="illustration"
+              alt="Physics login illustration"
             />
           </div>
         </div>

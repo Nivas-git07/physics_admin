@@ -34,9 +34,11 @@ pool
   .then(() => console.log("✅ Connected to PostgreSQL"))
   .catch((err) => {
     console.error("❌ Database connection error:", err.message);
-    process.exit(1);
+    console.error("Database-backed routes will fail until PostgreSQL is available.");
   });
 const JWT_SECRET = "supersecret";
+const ADMIN_EMAIL = "fathikhani12@gmail.com";
+const ADMIN_PASSWORD = "theone123";
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -296,31 +298,20 @@ app.post("/google", async (req, res) => {
 
 //login///
 app.post("/login", async (req, res) => {
-  const { email, password } = req.body;
+  const email = (req.body.email || "").trim().toLowerCase();
+  const { password } = req.body;
+
+  if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
+    return res.status(401).json({ message: "Only the admin account can sign in" });
+  }
+
   try {
-    const result = await pool.query("SELECT * FROM login WHERE email=$1", [
-      email,
-    ]);
-    if (result.rows.length === 0) {
-      return res.status(400).json({ message: "Invalid email" });
-    }
-    const user = result.rows[0];
-    const ispasswordvalid = await bcrypt.compare(password, user.password);
-    if (!ispasswordvalid) {
-      return res.status(400).json({ message: "Invalid password" });
-    }
-    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
+    const token = jwt.sign({ id: "admin", email, role: "admin" }, JWT_SECRET, {
       expiresIn: "1h",
     });
     console.log("Generated JWT Token:", token);
 
-    if (result.rows[0].status !== "ACTIVE") {
-      return res.status(403).json({
-        message: "Please register your account first by verifying OTP",
-      });
-    }
-
-    res.status(200).json({ message: "successful", token });
+    res.status(200).json({ message: "successful", token, email });
   } catch (error) {
     console.error("Error during login:", error.message);
     res.status(500).json({ message: "Internal server error" });
@@ -537,14 +528,9 @@ app.post("/glogin", async (req, res) => {
 app.get("/home", auth, async (req, res) => {
   const email = req.user.email;
   console.log(email);
-  try {
-    await pool.query("SELECT email FROM login WHERE email=$1", [email]);
-    return res
-      .status(200)
-      .json({ message: "welcome to the home page", email: email });
-  } catch (error) {
-    res.status(500).json({ message: "internal server error" });
-  }
+  return res
+    .status(200)
+    .json({ message: "welcome to the home page", email: email });
 });
 
 function mergeDateAndTime(dateStr, timeStr) {
@@ -571,7 +557,7 @@ function formatDate(dateObj) {
   const options = { day: "2-digit", month: "short", year: "numeric" };
   return dateObj.toLocaleDateString("en-GB", options); // 28 Nov 2025
 }
-app.post("/gmeet", async (req, res) => {
+app.post("/gmeet", adminOnly, async (req, res) => {
   try {
     const {
   email,
@@ -711,20 +697,24 @@ app.post("/gmeet", async (req, res) => {
   }
 });
 
-function auth(req, res, next) {
-  const token = req.headers.authorization.split(" ")[1];
+function adminOnly(req, res, next) {
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(" ")[1];
   if (!token) {
     return res.status(400).json({ message: "No token provided" });
   }
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
+    if (decoded.email !== ADMIN_EMAIL || decoded.role !== "admin") {
+      return res.status(403).json({ message: "Admin access only" });
+    }
     req.user = decoded;
     next();
   } catch (err) {
     return res.status(401).json({ message: "Invalid token" });
   }
 }
-app.get("/admin/users", async (req, res) => {
+app.get("/admin/users", adminOnly, async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT DISTINCT ON (email) 
@@ -754,7 +744,7 @@ app.get("/admin/users", async (req, res) => {
 });
 
 
-app.delete("/admin/delete-user/:email", async (req, res) => {
+app.delete("/admin/delete-user/:email", adminOnly, async (req, res) => {
   const { email} = req.params;
   console.log("Deleting user with email:", email);
 
@@ -816,7 +806,7 @@ app.get("/event", auth, async (req, res) => {
   }
 });
 
-app.get("/schedule", async (req, res) => {
+app.get("/schedule", adminOnly, async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT DISTINCT ON (email)
@@ -840,7 +830,7 @@ app.get("/schedule", async (req, res) => {
   }
 });
 
-app.get("/forms", async (req, res) => {
+app.get("/forms", adminOnly, async (req, res) => {
   try {
     const result = await pool.query(
       "SELECT * FROM form ORDER BY created_at DESC"
@@ -897,7 +887,7 @@ app.post("/form", async (req, res) => {
 });
 
 // DELETE form
-app.delete("/forms/:id", async (req, res) => {
+app.delete("/forms/:id", adminOnly, async (req, res) => {
   const { id } = req.params;
   try {
     await pool.query("DELETE FROM form WHERE id = $1", [id]);

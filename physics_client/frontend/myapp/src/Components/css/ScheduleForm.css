@@ -149,7 +149,6 @@ body {
 }
 
 /* Time Row */
-.time-row */
 .time-row {
   display: flex;
   gap: 15px;
@@ -993,4 +992,328 @@ html {
 }
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+/* Shared admin polish */
+.main-container {
+  background: linear-gradient(180deg, #f4fffd 0%, #ffffff 100%);
+}
+
+.schedule-card,
+.people-popup,
+.overlay-content {
+  border: 1px solid rgba(0, 168, 150, 0.14);
+  border-radius: 8px !important;
+}
+
+.schedule-card h1,
+.popup-header h2 {
+  color: #102027;
+}
+
+.next-btn,
+.create-btn,
+.proceed-btn,
+.select-all-btn {
+  background: linear-gradient(135deg, #00a896, #057d74) !important;
+  border-radius: 8px !important;
+}
+
+.back-btn,
+.clear-all-btn {
+  border-radius: 8px !important;
+}
+
+.schedule-card input:focus,
+.popup-search:focus {
+  border-color: #00a896 !important;
+  box-shadow: 0 0 0 4px rgba(0, 168, 150, 0.12);
+}
+/* ===================================================== */
+/* SCHEDULE FORM UX UPGRADE                             */
+/* Time picker + validation + confirm + success modal    */
+/* ===================================================== */
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.field-group label,
+.main-label {
+  font-size: 14px;
+  font-weight: 800;
+  color: #102027;
+}
+
+.schedule-card input {
+  margin: 0 !important;
+  border: 1px solid rgba(15, 23, 42, 0.12) !important;
+  background: #ffffff;
+  transition: 0.25s ease;
+}
+
+.schedule-card input:focus {
+  border-color: #00a896 !important;
+  box-shadow: 0 0 0 4px rgba(0, 168, 150, 0.12) !important;
+}
+
+.field-error {
+  font-size: 13px;
+  color: #e11d48;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.center-error {
+  text-align: center;
+  margin-top: 12px;
+}
+
+.time-selection-box {
+  padding: 18px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, #f4fffd 0%, #ffffff 100%);
+  border: 1px solid rgba(0, 168, 150, 0.14);
+  margin-top: 10px;
+}
+
+.quick-time-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 14px 0 18px;
+}
+
+.time-chip {
+  border: 1px solid rgba(0, 168, 150, 0.18);
+  background: #ffffff;
+  color: #057d74;
+  border-radius: 14px;
+  padding: 11px 8px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.time-chip:hover {
+  background: #eafffb;
+  transform: translateY(-2px);
+}
+
+.time-chip.active {
+  background: linear-gradient(135deg, #00a896, #057d74);
+  color: #ffffff;
+  box-shadow: 0 10px 24px rgba(0, 168, 150, 0.22);
+}
+
+.improved-time-row {
+  margin-top: 10px !important;
+}
+
+.time-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.time-box label {
+  font-weight: 700;
+  color: #475569;
+}
+
+.time-row input[type="time"] {
+  height: 50px;
+  padding: 0 14px !important;
+  border-radius: 14px !important;
+}
+
+/* Confirm details */
+.confirm-box {
+  margin-top: 18px;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 168, 150, 0.14);
+  background: #ffffff;
+  box-shadow: 0 16px 42px rgba(0, 168, 150, 0.10);
+}
+
+.confirm-header {
+  padding: 24px;
+  background:
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.22), transparent 30%),
+    linear-gradient(135deg, #00a896, #057d74);
+  color: #ffffff;
+}
+
+.confirm-header span {
+  display: inline-flex;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+}
+
+.confirm-header h3 {
+  font-size: 26px;
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+
+.confirm-header p {
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+.confirm-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: rgba(0, 168, 150, 0.12);
+}
+
+.confirm-item {
+  background: #ffffff;
+  padding: 18px;
+}
+
+.confirm-item span {
+  display: block;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+
+.confirm-item strong {
+  color: #102027;
+  font-size: 15px;
+}
+
+.confirm-actions {
+  flex-direction: row !important;
+  gap: 12px !important;
+}
+
+/* Success overlay */
+.overlay-content {
+  width: min(92vw, 480px);
+  border-radius: 28px !important;
+  padding: 34px 28px !important;
+  border: 1px solid rgba(0, 168, 150, 0.14);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
+}
+
+.success-icon {
+  width: 78px;
+  height: 78px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #00a896, #057d74);
+  color: #ffffff;
+  font-size: 44px;
+  font-weight: 900;
+  box-shadow: 0 16px 34px rgba(0, 168, 150, 0.28);
+}
+
+.success-title {
+  font-size: 24px;
+  color: #102027;
+  margin-bottom: 8px;
+}
+
+.success-text {
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.success-summary {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0;
+  text-align: left;
+}
+
+.success-summary div {
+  padding: 13px 14px;
+  border-radius: 14px;
+  background: #f4fffd;
+  border: 1px solid rgba(0, 168, 150, 0.12);
+}
+
+.success-summary span {
+  display: block;
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.success-summary strong {
+  color: #102027;
+  font-size: 14px;
+}
+
+.meeting-link-btn {
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 48px;
+  border-radius: 14px;
+  background: #ecfffb;
+  color: #057d74;
+  font-weight: 800;
+  text-decoration: none;
+  border: 1px solid rgba(0, 168, 150, 0.18);
+  margin: 8px 0 12px;
+}
+
+.done-btn {
+  width: 100%;
+  min-height: 50px;
+  border-radius: 14px !important;
+  background: linear-gradient(135deg, #00a896, #057d74) !important;
+  font-weight: 800;
+}
+
+@media (max-width: 768px) {
+  .quick-time-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .time-row {
+    flex-direction: column;
+  }
+
+  .confirm-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .confirm-actions {
+    flex-direction: column !important;
+  }
+
+  .confirm-actions button {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .success-title {
+    font-size: 21px;
+  }
 }

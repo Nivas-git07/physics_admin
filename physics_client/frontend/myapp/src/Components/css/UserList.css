@@ -304,3 +304,34 @@
     box-shadow: 0 10px 30px rgba(0, 191, 165, 0.12);
   }
 }
+
+/* Shared admin polish */
+.userlist-container {
+  background: linear-gradient(180deg, #f4fffd 0%, #ffffff 100%);
+}
+
+.user-card,
+.modal,
+.search-bar input {
+  border: 1px solid rgba(0, 168, 150, 0.14);
+  border-radius: 8px !important;
+}
+
+.header h1,
+.user-name {
+  color: #102027;
+}
+
+.avatar,
+.confirm-delete-btn {
+  background: linear-gradient(135deg, #00a896, #057d74) !important;
+}
+
+.delete-btn {
+  border-radius: 8px !important;
+}
+
+.search-bar input:focus {
+  border-color: #00a896 !important;
+  box-shadow: 0 0 0 4px rgba(0, 168, 150, 0.12);
+}

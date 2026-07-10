@@ -72,9 +72,9 @@ const ResearchSection = () => {
             <div className="icon-box">{item.icon}</div>
             <h3>{item.title}</h3>
             <p>{item.description}</p>
-            <a href="#" className="read-more">
+            <button type="button" className="read-more">
               Read More <FaArrowRight className="arrow" />
-            </a>
+            </button>
           </div>
         ))}
       </div>

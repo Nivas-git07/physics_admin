@@ -15,7 +15,9 @@ export default function FormSubmissions() {
 
   const fetchForms = async () => {
     try {
-      const res = await fetch("http://localhost:5000/forms");
+      const res = await fetch("http://localhost:5000/forms", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
       const data = await res.json();
       if (data.success) setForms(data.forms);
     } catch (err) {
@@ -27,16 +29,25 @@ export default function FormSubmissions() {
   };
 
   const handleDelete = async () => {
-    if (!deleteId) return;
-    try {
-      await fetch(`http://localhost:5000/forms/${deleteId}`, { method: "DELETE" });
-      setForms(prev => prev.filter(f => f.id !== deleteId));
-      setDeleteId(null);
-      alert("Deleted successfully!");
-    } catch (err) {
-      alert("Delete failed");
+  if (!deleteId) return;
+
+  try {
+    const res = await fetch(`http://localhost:5000/forms/${deleteId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
+
+    if (!res.ok) {
+      throw new Error("Delete failed");
     }
-  };
+
+    setForms((prev) => prev.filter((f) => f.id !== deleteId));
+    setDeleteId(null);
+  } catch (err) {
+    console.error(err);
+    setDeleteId(null);
+  }
+};
 
   if (loading) return <div className="loading">Loading submissions...</div>;
 
