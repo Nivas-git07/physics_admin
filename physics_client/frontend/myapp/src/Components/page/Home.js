@@ -4,6 +4,9 @@ import "../css/FooterSection.css"
 import profileImg from "../../assets/phymam.jpg"; // replace with your actual image
 import ResearchSection from "./ResearchSection";
 import user1 from "../../assets/student1.jpg";
+import user2 from "../../assets/akp1.jpg";
+import user3 from "../../assets/farp1.jpg";
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../pagecomponent/footer/footer";
@@ -65,23 +68,26 @@ const HomePage = () => {
     }
   };
 
-  const testimonials = [
-    {
-      name: "Nivas",
-      role: "Class XII Student",
-      text: "The teaching methodology at Alsana helped me understand complex physics concepts easily. My grades improved significantly!",
-    },
-    {
-      name: "Aakash",
-      role: "Engineering Student",
-      text: "Excellent problem-solving approach and personalized attention. The foundation I built here helped me excel in engineering.",
-    },
-    {
-      name: "Karuppu",
-      role: "Medical Student",
-      text: "The conceptual clarity provided here was instrumental in my NEET preparation. Highly recommended for serious students.",
-    },
-  ];
+ const testimonials = [
+  {
+    name: "Nivas",
+    role: "Class XII Student",
+    image: user1,
+    text: "The teaching methodology at Alsana helped me understand complex physics concepts easily. My grades improved significantly!",
+  },
+  {
+    name: "Aakash",
+    role: "Engineering Student",
+    image: user2,
+    text: "Excellent problem-solving approach and personalized attention. The foundation I built here helped me excel in engineering.",
+  },
+  {
+    name: "Fareed",
+    role: "Medical Student",
+    image: user3,
+    text: "The conceptual clarity provided here was instrumental in my NEET preparation. Highly recommended for serious students.",
+  },
+];
 
   return (
     <div>
@@ -292,7 +298,7 @@ const HomePage = () => {
   style={{ transitionDelay: `${i * 120}ms` }}
 >
                 <div className="profile-header">
-                  <img src={user1} alt={t.name} className="profile-img" />
+                  <img src={t.image} alt={t.name} className="profile-img" />
                   <div className="profile-info">
                     <h4>{t.name}</h4>
                     <span>{t.role}</span>
