@@ -20,7 +20,6 @@ function App() {
   return (
     <Router>
       <Routes>
-  
         <Route path="/" element={<LoginForm/>}/>
         <Route path="/login" element={<LoginForm/>}/>
         <Route path="/Otp-verify" element={<OtpVerify/>}/>
