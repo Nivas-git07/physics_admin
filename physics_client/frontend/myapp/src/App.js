@@ -6,8 +6,7 @@ import HomePage from "./Components/page/Home";
 import ForgotPassword from "./Components/page/forgetpassword";
 import MultiStepForm from "./Components/page/MultiStepForm";
 import ConfirmPassword from "./Components/page/confirmpassword";
-import AuthCallback from "./Components/logincomponents/googleauth";
-import Githubcallback from "./Components/logincomponents/github";
+
 import ScheduleForm from "./Components/page/ScheduleForm";
 import UserList from "./Components/page/UserList";
 import FormSubmissions from "./Components/page/FormSubmissions";
@@ -28,8 +27,7 @@ function App() {
         <Route path="/home" element={<AdminRoute><HomePage/></AdminRoute>}/>
         <Route path="/forget_password" element={<ForgotPassword/>}/>
         <Route path="/confirm_password" element={<ConfirmPassword/>}/>
-        <Route path="/auth/callback" element={<AuthCallback/>}/>
-        <Route path="/auth/github/callback" element={<Githubcallback />} />
+       
         <Route path="/schedule" element={<AdminRoute><ScheduleForm/></AdminRoute>}/>
         <Route path="/users" element={<AdminRoute><UserList/></AdminRoute>}/>
         <Route path="/detail" element={<AdminRoute><FormSubmissions/></AdminRoute>}/>
