@@ -38,7 +38,7 @@ pool
   });
 const JWT_SECRET = "supersecret";
 const ADMIN_EMAIL = "fathikhani12@gmail.com";
-const ADMIN_PASSWORD = "theone123";
+const ADMIN_PASSWORD = "interstellar";
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
