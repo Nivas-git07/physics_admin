@@ -560,45 +560,74 @@ function formatDate(dateObj) {
 app.post("/gmeet", adminOnly, async (req, res) => {
   try {
     const {
-  email,
-  class_name,
-  date,
-  start,
-  end,
-  meeting_link
-} = req.body;
+      email,
+      class_name,
+      topic,
+      date,
+      start,
+      end,
+      meeting_link,
+    } = req.body;
 
-    const startDateObj = mergeDateAndTime(req.body.date, req.body.start);
-    const endDateObj = mergeDateAndTime(req.body.date, req.body.end);
+    console.log("GMEET BODY:", req.body);
+
+    // Validate required fields
+    if (
+      !email ||
+      !class_name ||
+      !topic ||
+      !date ||
+      !start ||
+      !end ||
+      !meeting_link
+    ) {
+      return res.status(400).json({
+        message: "Required fields missing",
+      });
+    }
+
+    // Email must be array
+    if (!Array.isArray(email)) {
+      return res.status(400).json({
+        message: "Email must be an array",
+      });
+    }
+
+    // Convert date + time
+    const startDateObj = mergeDateAndTime(date, start);
+    const endDateObj = mergeDateAndTime(date, end);
+
     const emailStart = formatTime(startDateObj);
     const emailEnd = formatTime(endDateObj);
     const emailDate = formatDate(startDateObj);
-    console.log("Node Server Time:", new Date().toString());
 
-    // 1️⃣ Validate input
-   if (!email || !class_name || !start || !end || !meeting_link) {
-  return res.status(400).json({
-    message: "Required fields missing",
-  });
-}
-    if (!Array.isArray(email)) {
-      return res.status(400).json({ message: "Email must be an array" });
-    }
+    console.log("Start:", startDateObj);
+    console.log("End:", endDateObj);
+    console.log("Topic:", topic);
 
-    // 2️⃣ Send request to N8N webhook
-   
-  
-
-    // 3️⃣ Extract meeting link and other info from N8N response
-
-   
-    const emailArray = email;
-
-    await pool.query(
-      "INSERT INTO gmeet (emails, class_name, start_time, end_time, meeting_link,email_start,email_end,email_date) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
-      [
-        emailArray,
+    // Save meeting in database
+    const result = await pool.query(
+      `
+      INSERT INTO gmeet (
+        emails,
         class_name,
+        topic,
+        start_time,
+        end_time,
+        meeting_link,
+        email_start,
+        email_end,
+        email_date
+      )
+      VALUES (
+        $1, $2, $3, $4, $5, $6, $7, $8, $9
+      )
+      RETURNING *
+      `,
+      [
+        email,
+        class_name,
+        topic,
         startDateObj,
         endDateObj,
         meeting_link,
@@ -607,96 +636,160 @@ app.post("/gmeet", adminOnly, async (req, res) => {
         emailDate,
       ]
     );
+
+    console.log("Saved meeting:", result.rows[0]);
+
+    // Send email
     await transporter.sendMail({
-  from: process.env.EMAIL_USER,
-  bcc: email,
-  subject: `Class Scheduled - ${class_name}`,
- html: `
-<div style="font-family:Arial,sans-serif;background:#f4f6f9;padding:30px;">
-  <div style="
-    max-width:600px;
-    margin:auto;
-    background:white;
-    border-radius:10px;
-    padding:30px;
-    box-shadow:0 2px 10px rgba(0,0,0,0.1);
-  ">
+      from: process.env.EMAIL_USER,
+      bcc: email,
+      subject: `Class Scheduled - ${class_name}`,
+      html: `
+        <div
+          style="
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            padding: 30px;
+          "
+        >
+          <div
+            style="
+              max-width: 600px;
+              margin: auto;
+              background: white;
+              border-radius: 10px;
+              padding: 30px;
+              box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            "
+          >
 
-    <h1 style="color:#2563eb;text-align:center;">
-      Class Invitation
-    </h1>
+            <h1
+              style="
+                color: #2563eb;
+                text-align: center;
+              "
+            >
+              Class Invitation
+            </h1>
 
-    <p>Hello Student,</p>
+            <p>Hello Student,</p>
 
-    <p>You have been invited to attend the following class:</p>
+            <p>
+              You have been invited to attend the following class:
+            </p>
 
-    <table style="width:100%;border-collapse:collapse;">
-      <tr>
-        <td><strong>Class</strong></td>
-        <td>${class_name}</td>
-      </tr>
+            <table
+              style="
+                width: 100%;
+                border-collapse: collapse;
+              "
+            >
+              <tr>
+                <td style="padding:8px;">
+                  <strong>Class</strong>
+                </td>
 
-      <tr>
-        <td><strong>Date</strong></td>
-        <td>${emailDate}</td>
-      </tr>
+                <td style="padding:8px;">
+                  ${class_name}
+                </td>
+              </tr>
 
-      <tr>
-        <td><strong>Time</strong></td>
-        <td>${emailStart} - ${emailEnd}</td>
-      </tr>
-    </table>
+              <tr>
+                <td style="padding:8px;">
+                  <strong>Topic</strong>
+                </td>
 
-    <div style="text-align:center;margin-top:30px;">
-      <a href="${meeting_link}"
-         style="
-           background:#2563eb;
-           color:white;
-           text-decoration:none;
-           padding:14px 28px;
-           border-radius:8px;
-           display:inline-block;
-           font-weight:bold;
-         ">
-        Join Class
-      </a>
-    </div>
+                <td style="padding:8px;">
+                  ${topic}
+                </td>
+              </tr>
 
-    <p style="margin-top:25px;">
-      If the button doesn't work:
-    </p>
+              <tr>
+                <td style="padding:8px;">
+                  <strong>Date</strong>
+                </td>
 
-    <p>
-      <a href="${meeting_link}">
-        ${meeting_link}
-      </a>
-    </p>
+                <td style="padding:8px;">
+                  ${emailDate}
+                </td>
+              </tr>
 
-    <hr>
+              <tr>
+                <td style="padding:8px;">
+                  <strong>Time</strong>
+                </td>
 
-    <p style="font-size:12px;color:#666;">
-      Physics Academy • Automated Notification
-    </p>
+                <td style="padding:8px;">
+                  ${emailStart} - ${emailEnd}
+                </td>
+              </tr>
+            </table>
 
-  </div>
-</div>
-`,
-});
-    console.log("Event details saved to database");
+            <div
+              style="
+                text-align:center;
+                margin-top:30px;
+              "
+            >
+              <a
+                href="${meeting_link}"
+                target="_blank"
+                style="
+                  background:#2563eb;
+                  color:white;
+                  text-decoration:none;
+                  padding:14px 28px;
+                  border-radius:8px;
+                  display:inline-block;
+                  font-weight:bold;
+                "
+              >
+                Join Class
+              </a>
+            </div>
+
+            <p style="margin-top:25px;">
+              If the button doesn't work:
+            </p>
+
+            <p>
+              <a href="${meeting_link}">
+                ${meeting_link}
+              </a>
+            </p>
+
+            <hr>
+
+            <p
+              style="
+                font-size:12px;
+                color:#666;
+              "
+            >
+              Physics Academy • Automated Notification
+            </p>
+
+          </div>
+        </div>
+      `,
+    });
+
+    console.log("Email sent successfully");
 
     return res.status(200).json({
-  message: "Class scheduled successfully",
-  meetingLink: meeting_link,
-});
+      message: "Class scheduled successfully",
+      meeting: result.rows[0],
+      meetingLink: meeting_link,
+    });
   } catch (error) {
-    console.error("Axios Error:", error.response?.data || error.message);
+    console.error("GMEET ERROR:", error);
+
     return res.status(500).json({
-      message: "Error sending request",
-      error: error.response?.data || error.message,
+      message: "Error scheduling class",
+      error: error.message,
     });
   }
 });
-
 function adminOnly(req, res, next) {
   const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(" ")[1];
