@@ -302,7 +302,7 @@ app.post("/login", async (req, res) => {
   const { password } = req.body;
 
   if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
-    return res.status(401).json({ message: "Only the admin account can sign in" });
+    return res.status(401).json({ message: "Only the admin account can sign in" });n
   }
 
   try {
