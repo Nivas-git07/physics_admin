@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: "http://localhost:3000", // your frontend URL
+    origin: "https://admin.selfmade.technology", // your frontend URL
     credentials: true, // allow cookies / auth
   })
 );
@@ -466,7 +466,7 @@ app.post("/auth/github", async (req, res) => {
 
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.GOOGLE_SECRETCLIENT_ID;
-const REDIRECT_URI = "http://localhost:3000/auth/callback";
+const REDIRECT_URI = "https://admin.selfmade.technology/auth/callback";
 const oAuthclient = new OAuth2Client(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI);
 async function exchangegooglecode(authcode) {
   if (!authcode) throw new Error("no code retrieved");

@@ -65,7 +65,7 @@ const location = useLocation();
     }
 console.log(enteredOtp,email);
     try {
-      const response = await fetch("http://localhost:5000/verify", {
+      const response = await fetch("https://adminalsana.todayworld.in/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ checkotp: enteredOtp, email }),

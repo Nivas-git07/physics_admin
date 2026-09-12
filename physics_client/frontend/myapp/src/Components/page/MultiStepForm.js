@@ -212,7 +212,7 @@ const MultiStepForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:5000/form", {
+      const response = await fetch("https://adminalsana.todayworld.in/form", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

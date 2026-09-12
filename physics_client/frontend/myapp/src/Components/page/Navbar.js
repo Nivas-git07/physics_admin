@@ -23,7 +23,7 @@ export default function Navbar() {
           return;
         }
         setEmail(localStorage.getItem("adminEmail"));
-        const res = await fetch("http://localhost:5000/home", {
+        const res = await fetch("https://adminalsana.todayworld.in/home", {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (res.ok) {

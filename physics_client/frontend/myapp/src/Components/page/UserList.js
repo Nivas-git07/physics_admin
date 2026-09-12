@@ -15,7 +15,7 @@ export default function UserList() {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch("http://localhost:5000/admin/users", {
+      const res = await fetch("https://adminalsana.todayworld.in/admin/users", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       const data = await res.json();
@@ -33,7 +33,7 @@ export default function UserList() {
 
     try {
       const res = await fetch(
-        `http://localhost:5000/admin/delete-user/${deleteModal.email}`,
+        `https://adminalsana.todayworld.in/admin/delete-user/${deleteModal.email}`,
         {
           method: "DELETE",
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },

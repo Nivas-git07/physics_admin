@@ -26,7 +26,7 @@ const [successData, setSuccessData] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    fetch("http://localhost:5000/schedule", {
+    fetch("https://adminalsana.todayworld.in/schedule", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -191,7 +191,7 @@ const next = () => {
   };
 
   try {
-    const res = await fetch("http://localhost:5000/gmeet", {
+    const res = await fetch("https://adminalsana.todayworld.in/gmeet", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

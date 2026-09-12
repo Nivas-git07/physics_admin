@@ -28,7 +28,7 @@ export default function SignupForm({ onSubmit }) {
     setErrors({});
     // Your submission logic
     try {
-      const response = await fetch("http://localhost:5000/register", {
+      const response = await fetch("https://adminalsana.todayworld.in/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

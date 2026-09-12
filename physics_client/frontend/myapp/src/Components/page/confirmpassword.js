@@ -39,7 +39,7 @@ export default function ConfirmPassword() {
         seterror({});
          try{
           console.log(email,newPassword,"workgnn");
-            const respone = await fetch("http://localhost:5000/confrom-password",{
+            const respone = await fetch("https://adminalsana.todayworld.in/confrom-password",{
                 "method": "POST",
                 headers: {
                     "Content-type": "application/json",

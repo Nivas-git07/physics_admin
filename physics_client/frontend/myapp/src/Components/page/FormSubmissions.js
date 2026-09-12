@@ -15,7 +15,7 @@ export default function FormSubmissions() {
 
   const fetchForms = async () => {
     try {
-      const res = await fetch("http://localhost:5000/forms", {
+      const res = await fetch("https://adminalsana.todayworld.in/forms", {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       const data = await res.json();
@@ -32,7 +32,7 @@ export default function FormSubmissions() {
   if (!deleteId) return;
 
   try {
-    const res = await fetch(`http://localhost:5000/forms/${deleteId}`, {
+    const res = await fetch(`https://adminalsana.todayworld.in/forms/${deleteId}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
